@@ -14,37 +14,31 @@
                     <form method="POST" action="{{ route('projects.store') }}" enctype="multipart/form-data">
                         @csrf
 
-                        <div class="form-group">
-                            <label for="title">{{ __('Title') }}</label>
-                            <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autofocus>
+                        <div class="mb-4">
+                            <label for="title" class="block text-gray-700 text-sm font-bold mb-2">{{ __('Title') }}</label>
+                            <input id="title" type="text" class="form-input rounded-md shadow-sm mt-1 block w-full @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autofocus>
                             @error('title')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            <label for="description">{{ __('Description') }}</label>
-                            <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" required>{{ old('description') }}</textarea>
+                        <div class="mb-4">
+                            <label for="description" class="block text-gray-700 text-sm font-bold mb-2">{{ __('Description') }}</label>
+                            <textarea id="description" class="form-textarea rounded-md shadow-sm mt-1 block w-full @error('description') is-invalid @enderror" name="description" required>{{ old('description') }}</textarea>
                             @error('description')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            <label for="attachment">{{ __('Attachment') }}</label>
-                            <input id="attachment" type="file" class="form-control-file @error('attachment') is-invalid @enderror" name="attachment">
-                            @error('attachment')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                        <div class="mb-4">
+                            <label for="attachments" class="block text-gray-700 text-sm font-bold mb-2">{{ __('Attachments') }}</label>
+                            <input id="attachments" type="file" class="form-input rounded-md shadow-sm mt-1 block w-full @error('attachments.*') is-invalid @enderror" name="attachments[]" multiple>
+                            @error('attachments.*')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded">
                             {{ __('Create') }}
                         </button>
                     </form>

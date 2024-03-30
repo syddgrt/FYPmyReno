@@ -38,17 +38,41 @@ class DashboardController extends Controller{
     }   
 
     public function showPortfolio(User $designer)
-{
-    // Assuming there's a relationship between User and Portfolio
-    $portfolio = $designer->portfolio;
+    {
+        // Assuming there's a relationship between User and Portfolio
+        $portfolio = $designer->portfolio;
 
-    if ($portfolio) {
-        // Load the portfolio items if needed
-        $portfolio->load('items');
-        return view('portfolios.show', compact('portfolio'));
-    } else {
-        abort(404, 'Portfolio not found.');
+        if ($portfolio) {
+            // Load the portfolio items if needed
+            $portfolio->load('items');
+            return view('portfolios.show', compact('portfolio'));
+        } else {
+            abort(404, 'Portfolio not found.');
+        }
     }
-}
+
+    public function showDesignerProfile($id)
+    {
+        $designer = User::findOrFail($id);
+
+        return view('designers.profile', compact('designer'));
+    }
+
+    public function startConversation(Request $request, $recipientId)
+    {
+        $user = Auth::user();
+        $recipient = User::findOrFail($recipientId);
+
+        // Check if a conversation already exists between the users
+        $conversation = $user->getConversationWith($recipient);
+
+        // If a conversation does not exist, start a new one
+        if (!$conversation) {
+            $conversation = $user->startConversationWith($recipient);
+        }
+
+        // Redirect to the conversation view
+        return redirect()->route('conversations.show', ['conversationId' => $conversation->id])->with('success', 'Conversation started successfully!');
+    }
 
 }

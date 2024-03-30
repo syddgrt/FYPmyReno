@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\CollaborationsController;
+use App\Http\Controllers\FinancesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -39,13 +43,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     Route::get('/designers', [DashboardController::class, 'showDesigners'])->name('designers.index');
+    Route::get('/designers/{id}', [DashboardController::class, 'showDesignerProfile'])->name('designers.profile');
     Route::get('/designers/{designer}', [DashboardController::class, 'showPortfolio'])->name('designers.portfolio');
 
+    // Route::get('/conversations', [MessageController::class, 'showConversations'])->name('conversations.index');
+    Route::get('/conversations/{recipientId?}', [MessageController::class, 'showConversations'])
+    ->name('conversations.index');
+    Route::post('/conversations/start/{recipientId}', [MessageController::class, 'startConversation'])->name('conversations.start');
 
+    Route::post('/collaborations', [CollaborationsController::class, 'store'])->name('collaborations.store');
 
-    
+    // Route::post('/conversations/start/{recipientId}', [MessageController::class, 'startConversation'])->name('conversations.start');
 
+    Route::get('/collaboration-requests', [CollaborationsController::class, 'index'])->name('collaborations.index');
+    Route::put('/collaborations/{collaboration}', [CollaborationsController::class, 'update'])->name('collaborations.update');
 
+    Route::get('/finances', [FinancesController::class, 'index'])->name('finances.index');
 
 });
 
