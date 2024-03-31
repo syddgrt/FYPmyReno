@@ -66,4 +66,13 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function showProfile($userId) {
+        $user = User::findOrFail($userId);
+        $portfolios = $user->portfolios()->get(); // Assuming portfolios is a relationship method
+    
+        return view('profile', compact('user', 'portfolios'));
+    }
+
+
 }

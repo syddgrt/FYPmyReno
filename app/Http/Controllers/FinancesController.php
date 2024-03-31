@@ -15,7 +15,7 @@ class FinancesController extends Controller
     public function index()
     {
         // Retrieve financial data from the database
-        $financialData = FinancialData::all(); // Adjust this based on your model and database structure
+        $financialData = FinancialData::where('client_id', $clientId)->get();
 
         // Sample data for the analytics chart
         $chartData = [

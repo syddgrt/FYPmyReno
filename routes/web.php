@@ -45,6 +45,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/designers', [DashboardController::class, 'showDesigners'])->name('designers.index');
     Route::get('/designers/{id}', [DashboardController::class, 'showDesignerProfile'])->name('designers.profile');
     Route::get('/designers/{designer}', [DashboardController::class, 'showPortfolio'])->name('designers.portfolio');
+    Route::get('/profile/{userId}', [ProfileController::class, 'showProfile'])->name('profile.show');
+
 
     // Route::get('/conversations', [MessageController::class, 'showConversations'])->name('conversations.index');
     Route::get('/conversations/{recipientId?}', [MessageController::class, 'showConversations'])

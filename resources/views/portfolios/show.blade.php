@@ -1,12 +1,26 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Show Portfolio') }}
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Show Portfolio') }}
+
+                
+                <a href="{{ route('portfolios.modify') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modify Portfolio</a>
+                
+            </h2>
+        </div>
+        
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Portfolio Title and Description -->
+            <div class="mb-8">
+                <h1 class="text-2xl text-gray font-bold">{{ $portfolio->title }}</h1>
+                <p class="mt-4">{{ $portfolio->description }}</p>
+            </div>
+            <!-- Portfolio Items -->
+            My portfolio
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach($portfolio->items as $item)
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -24,4 +38,23 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal for full-size image view -->
+    <div id="imageModal" class="hidden fixed z-50 left-0 top-0 w-full h-full overflow-auto bg-black bg-opacity-50">
+        <div class="modal-content container mx-auto lg:w-1/2 xl:w-1/3 p-5">
+            <span class="close cursor-pointer text-white text-2xl float-right">&times;</span>
+            <img id="fullSizeImage" src="" class="w-full h-auto">
+        </div>
+    </div>
+
+    <script>
+        function openModal(imageUrl) {
+            document.getElementById('fullSizeImage').src = imageUrl;
+            document.getElementById('imageModal').style.display = 'block';
+        }
+
+        document.querySelector('#imageModal .close').addEventListener('click', function() {
+            document.getElementById('imageModal').style.display = 'none';
+        });
+    </script>
 </x-app-layout>

@@ -8,13 +8,13 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="p-6 text-black-900 dark:text-black-100">
                     <!-- Your modification form goes here -->
                     <form action="{{ route('portfolios.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <!-- Title input -->
                         <div class="mb-4">
-                            <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
+                            <label for="title" class="block text-sm font-medium text-black-700 dark:text-black-300">Title</label>
                             <input type="text" name="title" id="title" value="{{ $portfolio->title }}" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         
