@@ -62,6 +62,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/finances', [FinancesController::class, 'index'])->name('finances.index');
 
+// Show the form to create new financial data
+    // Show the form to create new financial data
+Route::get('/finances/create', [FinancesController::class, 'create'])->name('finances.create');
+
+// Store new financial data
+Route::post('/finances', [FinancesController::class, 'store'])->name('finances.store');
+
+// Show the form to edit existing financial data
+Route::get('/finances/{id}/edit', [FinancesController::class, 'edit'])->name('finances.edit');
+
+// Update existing financial data
+Route::put('/finances/{id}', [FinancesController::class, 'update'])->name('finances.update');
+
+
+
+    Route::get('/designers/{designerId}', [PortfolioController::class, 'showDesignerProfile'])->name('designers.profile');
+
+
+    
+
 });
 
 Route::get('/dashboard/search', [DashboardController::class, 'search'])->name('dashboard.search');

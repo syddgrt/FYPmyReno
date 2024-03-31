@@ -3,34 +3,103 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\FinancialData; // Assuming FinancialData model exists
+use App\Models\FinancialData;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Projects; // Correct reference if your model is named Project
 
 class FinancesController extends Controller
 {
-    /**
-     * Display the finances information and basic data analytics.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        // Retrieve financial data from the database
-        $financialData = FinancialData::where('client_id', $clientId)->get();
+        $userId = Auth::id(); // Assuming you want to fetch projects related to the logged-in user
+        // Assuming you want to show all financial data, adjust the query as needed
+        $financialDatas = FinancialData::whereHas('project', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->get();
+        
+        // Pass the financialDatas variable to the view
+        return view('finances.index', compact('financialDatas'));
+    }
 
-        // Sample data for the analytics chart
-        $chartData = [
-            'labels' => ['January', 'February', 'March', 'April', 'May', 'June'],
+
+    protected function prepareChartData($financialData)
+    {
+        $labels = $financialData->pluck('date')->unique();
+        $dataset = $financialData->groupBy('date')->map(function ($items) {
+            return $items->sum('amount');
+        });
+
+        return [
+            'labels' => $labels->all(),
             'datasets' => [
                 [
-                    'label' => 'Revenue',
-                    'data' => [5000, 5500, 6000, 6500, 7000, 7500],
+                    'label' => 'Financial Activity',
+                    'data' => $dataset->values()->all(),
                     'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
                     'borderColor' => 'rgba(75, 192, 192, 1)',
-                    'borderWidth' => 1
-                ]
-            ]
+                    'borderWidth' => 1,
+                ],
+            ],
         ];
-
-        return view('finances.index', compact('financialData', 'chartData'));
     }
+
+    public function edit($id)
+    {
+        $financialData = FinancialData::findOrFail($id); // Fetch the finance data entry
+        return view('finances.edit', compact('financialData')); // Return the edit view
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'cost_estimation' => 'required|numeric',
+            'actual_cost' => 'required|numeric',
+            'tax' => 'required|numeric',
+            'additional_fees' => 'required|numeric',
+        ]);
+
+        $financialData = FinancialData::findOrFail($id);
+        $financialData->update($request->all());
+
+        // Redirect to a relevant page with a success message
+        return redirect()->route('some.route')->with('success', 'Financial data updated successfully!');
+    }
+
+    public function create()
+    {
+        $projects = Projects::where('user_id', Auth::id())->get();
+
+        if ($projects->isEmpty()) {
+            return back()->with('error', 'No projects found.');
+        }
+    
+        return view('finances.create', compact('projects'));
+    }
+
+    public function store(Request $request)
+{
+    $request->validate([
+        'project_id' => 'required|integer|exists:projects,id',
+        'cost_estimation' => 'required|numeric',
+        'actual_cost' => 'required|numeric',
+        'tax' => 'required|numeric',
+        'additional_fees' => 'required|numeric',
+    ]);
+
+    FinancialData::create([
+        'project_id' => $request->input('project_id'),
+        'cost_estimation' => $request->input('cost_estimation', 0), // Providing a default value as an example
+        'actual_cost' => $request->input('actual_cost', 0),
+        'tax' => $request->input('tax', 0),
+        'additional_fees' => $request->input('additional_fees', 0),
+    ]);
+    
+
+    // Redirect back or to another page after successful creation
+    return redirect()->route('finances.index')->with('success', 'Financial data added successfully.');
+}
+
+
+
 }

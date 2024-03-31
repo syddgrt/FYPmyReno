@@ -25,6 +25,6 @@ class Projects extends Model
 
     public function collaborations()
     {
-        return $this->hasMany(Collaboration::class);
+        return $this->hasMany(Collaborations::class);
     }
 }

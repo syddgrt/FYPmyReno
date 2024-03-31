@@ -14,39 +14,44 @@
                         <h2 class="text-xl font-semibold mb-2">Financial Data</h2>
                         <div class="overflow-x-auto">
                             <table class="table-auto border-collapse border border-gray-800 w-full">
+                            <div class="mb-4 flex justify-end">
+    <a href="{{ route('finances.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Add New Financial Data
+    </a>
+</div>
+
                                 <thead>
                                     <tr class="bg-gray-200">
-                                        <th class="border border-gray-600 px-4 py-2">Date</th>
-                                        <th class="border border-gray-600 px-4 py-2">Revenue</th>
-                                        <th class="border border-gray-600 px-4 py-2">Expenses</th>
-                                        <th class="border border-gray-600 px-4 py-2">Profit</th>
+                                        <th class="border border-gray-600 px-4 py-2">Project ID</th>
+                                        <th class="border border-gray-600 px-4 py-2">Cost Estimation</th>
+                                        <th class="border border-gray-600 px-4 py-2">Actual Cost</th>
+                                        <th class="border border-gray-600 px-4 py-2">Tax</th>
+                                        <th class="border border-gray-600 px-4 py-2">Additional Fees</th>
+                                        <th class="border border-gray-600 px-4 py-2">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Sample data, replace with actual data -->
+                                    @foreach ($financialDatas as $data)
                                     <tr>
-                                        <td class="border border-gray-600 px-4 py-2">2024-03-01</td>
-                                        <td class="border border-gray-600 px-4 py-2">$5000</td>
-                                        <td class="border border-gray-600 px-4 py-2">$3000</td>
-                                        <td class="border border-gray-600 px-4 py-2">$2000</td>
+                                        <td class="border border-gray-600 px-4 py-2">{{ $data->project_id }}</td>
+                                        <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->cost_estimation, 2) }}</td>
+                                        <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->actual_cost, 2) }}</td>
+                                        <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->tax, 2) }}</td>
+                                        <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->additional_fees, 2) }}</td>
+                                        <td class="border border-gray-600 px-4 py-2">
+                                            <a href="{{ route('finances.edit', $data->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                        </td>
                                     </tr>
-                                    <tr>
-                                        <td class="border border-gray-600 px-4 py-2">2024-03-02</td>
-                                        <td class="border border-gray-600 px-4 py-2">$5500</td>
-                                        <td class="border border-gray-600 px-4 py-2">$3200</td>
-                                        <td class="border border-gray-600 px-4 py-2">$2300</td>
-                                    </tr>
-                                    <!-- Add more rows as needed -->
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <!-- Data Analytics Chart -->
+                    <!-- Data Analytics Chart Placeholder -->
                     <div>
                         <h2 class="text-xl font-semibold mb-2">Data Analytics</h2>
                         <div class="bg-white border border-gray-800 rounded-lg p-4">
-                            <!-- Simple chart, replace with actual data visualization library -->
                             <canvas id="analyticsChart" width="400" height="200"></canvas>
                         </div>
                     </div>
@@ -59,27 +64,6 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Sample data for the chart
-        const data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-            datasets: [{
-                label: 'Revenue',
-                data: [5000, 5500, 6000, 6500, 7000, 7500],
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        const config = {
-            type: 'line',
-            data: data,
-            options: {}
-        };
-
-        var myChart = new Chart(
-            document.getElementById('analyticsChart'),
-            config
-        );
+        // Initialize Chart.js for your analytics chart as before
     </script>
 @endpush

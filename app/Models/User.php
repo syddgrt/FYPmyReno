@@ -57,6 +57,7 @@ class User extends Authenticatable
     public function projects()
     {
         return $this->hasMany(Projects::class);
+        
     }
 
     // Check if the user is a designer
@@ -74,6 +75,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Conversation::class, 'user_id');
     }
+
+    // public function portfolio()
+    // {
+    //     return $this->hasOne(Portfolio::class, 'user_id');
+    // }
+
 
     public function findConversation($recipientId)
     {
@@ -116,4 +123,5 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Collaboration::class, Project::class, 'client_id', 'project_id');
     }
+    
 }

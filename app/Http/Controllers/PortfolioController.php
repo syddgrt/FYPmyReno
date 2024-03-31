@@ -103,6 +103,19 @@ class PortfolioController extends Controller
     return redirect()->route('portfolios.modify')->with('success', 'Portfolio updated successfully!');
 }
 
+    public function showDesignerProfile($designerId)
+    {
+        $designer = Designer::find($designerId);
+        if (!$designer) {
+            abort(404, 'Designer not found.');
+        }
+
+        $portfolio = $designer->portfolio; // Make sure this relationship exists in your Designer model
+
+        return view('designers.profile', compact('designer', 'portfolio'));
+    }
+
+
 
 
 }

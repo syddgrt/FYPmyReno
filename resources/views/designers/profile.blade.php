@@ -20,6 +20,8 @@
                 <!-- Portfolio Section -->
                 <div class="portfolio">
                     <h2 class="text-xl font-semibold mb-4">Portfolio</h2>
+
+                    
                     @if ($designer->portfolio)
                         <div class="grid grid-cols-2 gap-4">
                             @forelse ($designer->portfolio->items as $item)

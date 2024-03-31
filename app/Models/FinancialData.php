@@ -6,19 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class FinancialData extends Model
 {
-    protected $fillable = ['client_id', 'designer_id', 'type', 'amount', 'description', 'date'];
+    protected $fillable = ['project_id', 'cost_estimation', 'actual_cost', 'tax', 'additional_fees'];
 
     protected $table = 'financial_datas';
     
-    public function client()
+    // Assuming each financial data entry is associated with a project
+    public function project()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Projects::class);
     }
 
-    // Similarly for a Designer model
-    public function designer()
-    {
-        return $this->belongsTo(Designer::class);
-    }
+    // You might not need direct client and designer relationships if they can be inferred through the project
 }
-
