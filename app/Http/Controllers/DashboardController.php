@@ -17,6 +17,14 @@ class DashboardController extends Controller{
         return view('dashboard', ['userRole' => $userRole]);
     }
 
+    // public function nav()
+    // {
+    //     $user = Auth::user();
+    //     $userRole = $user->role; // Assuming 'role' is the column in your users table that stores user role
+    //     // dd($userRole); // Check if $userRole is correctly retrieved
+    //     return view('navigation', compact('userRole'));
+    // }
+
     public function search(Request $request)
     {
         // Get the search query from the request

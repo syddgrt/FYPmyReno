@@ -21,6 +21,7 @@
                         {{ __('Projects') }}
                     </x-nav-link>
                 </div>
+                @if($userRole === 'CLIENT')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('collaborations.index')" :active="request()->routeIs('collaborations.index')">
                         {{ __('Designers') }}
@@ -36,6 +37,13 @@
                         {{ __('Collaboration') }}
                     </x-nav-link>
                 </div>
+                @elseif($userRole === 'DESIGNER')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('collaborations.index')" :active="request()->routeIs('collaborations.index')">
+                        {{ __('Clients') }}
+                    </x-nav-link>
+                </div>
+                @endif
             </div>
 
             <!-- Search Form -->
