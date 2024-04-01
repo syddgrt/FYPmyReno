@@ -27,4 +27,13 @@ class Projects extends Model
     {
         return $this->hasMany(Collaborations::class);
     }
+
+    public function canBeEditedByUser($user)
+    {
+        if ($this->user_id === $user->id) {
+            return true;
+        }
+
+        return $this->collaborations()->where('status', 'accepted')->where('designer_id', $user->id)->exists();
+    }
 }

@@ -18,10 +18,10 @@ class CollaborationsController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the request data
         $request->validate([
-            // Add validation rules for the request data
+            'project_id' => 'required|exists:projects,id|unique:collaborations,project_id,NULL,id,designer_id,'.Auth::id(),
         ]);
+        
 
         // Retrieve the project
         $project = Projects::findOrFail($request->input('project_id'));
@@ -60,16 +60,26 @@ class CollaborationsController extends Controller
         return redirect()->back()->with('success', 'Collaboration request updated successfully!');
     }
 
-    public function index()
+        public function index()
     {
-        // Retrieve collaboration requests for the logged-in client
-        $collaborationRequests = Collaborations::where('client_id', Auth::id())->get();
-
-        // Load designer details for each collaboration request
-        $collaborationRequests->load('designer');
+        $userId = Auth::id();
+        if (Auth::user()->role === 'DESIGNER') {
+            // Fetch collaborations where the authenticated user is the designer
+            $collaborationRequests = Collaborations::where('designer_id', $userId)
+                                                    ->with(['project', 'client']) // Assuming you have these relationships
+                                                    ->get();
+        } else {
+            // Fetch collaborations related to the client's projects
+            $collaborationRequests = Collaborations::whereHas('project', function ($query) use ($userId) {
+                                                        $query->where('user_id', $userId);
+                                                    })
+                                                    ->with(['project', 'designer'])
+                                                    ->get();
+        }
 
         return view('collaborations.index', compact('collaborationRequests'));
     }
+
 
     /**
      * Remove the specified collaboration request from storage.
@@ -85,6 +95,33 @@ class CollaborationsController extends Controller
         // Redirect the user to a relevant page
         return redirect()->back()->with('success', 'Collaboration request deleted successfully!');
     }
+
+    public function show(Projects $project)
+{
+    $project->load('user');
+    $attachments = $project->attachments;
+    $images = $attachments->pluck('file_path')->toArray();
+    $collaborationRequests = Collaborations::where('project_id', $project->id)->get();
+
+    // Initialize $hasSentRequest as false for all users
+    $hasSentRequest = false;
+    $myRequest = null; // Initialize $myRequest
+
+    // Update $hasSentRequest for DESIGNERS only and get the request if exists
+    if (Auth::user()->role === 'DESIGNER') {
+        $myRequest = Collaborations::where('project_id', $project->id)
+                                   ->where('designer_id', Auth::id())
+                                   ->first(); // Use first() to get the actual request if it exists
+        $hasSentRequest = !is_null($myRequest); // Update based on existence of $myRequest
+    }
+
+    return view('projects.show', compact('project', 'images', 'collaborationRequests', 'hasSentRequest', 'myRequest'));
+}
+
+
+
+
+    
 
     
 }

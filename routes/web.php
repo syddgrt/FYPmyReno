@@ -34,6 +34,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('projects', ProjectsController::class);
     Route::get('/projects/create', [ProjectsController::class, 'create'])->name('projects.create');
     Route::get('/projects/client', [ProjectsController::class, 'clientProjects'])->name('projects.client');
+    Route::get('/projects/{project}', [CollaborationsController::class, 'show'])->name('projects.show');
+    Route::get('/projects/{id}/edit', [ProjectsController::class, 'edit'])->name('projects.edit');
+
     
 
     Route::get('/portfolio/index', [PortfolioController::class, 'index'])->name('portfolios.index');

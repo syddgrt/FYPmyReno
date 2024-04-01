@@ -113,10 +113,25 @@ class ProjectsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Projects $projects)
+    public function edit($id)
     {
-        //
+        $project = Projects::findOrFail($id);
+        $userId = Auth::id();
+
+        // Check if the user is the project owner or has an accepted collaboration
+        $isOwner = $project->user_id == $userId;
+        $isCollaborator = $project->collaborations()
+                                ->where('designer_id', $userId)
+                                ->where('status', 'accepted')
+                                ->exists();
+
+        if (!$isOwner && !$isCollaborator) {
+            return redirect()->route('projects.index')->with('error', 'Unauthorized access to edit the project.');
+        }
+
+        return view('projects.edit', compact('project'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -156,6 +171,7 @@ class ProjectsController extends Controller
         // Redirect the user to a relevant page
         return redirect()->route('projects.index')->with('success', 'Project updated successfully!');
     }
+    
 }
 
 

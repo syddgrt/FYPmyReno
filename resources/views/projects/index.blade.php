@@ -39,6 +39,10 @@
                                 @else
                                     <p class="text-gray-400 mt-2">No image attachment available.</p>
                                 @endif
+                                
+
+
+
                                 <a href="{{ route('projects.show', $project) }}" class="text-blue-500 hover:text-blue-700 mt-2 block">View Project Details</a>
                             </div>
                         </div>
