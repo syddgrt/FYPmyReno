@@ -47,6 +47,27 @@ class CollaborationsController extends Controller
      * @param  \App\Models\Collaborations  $collaboration
      * @return \Illuminate\Http\Response
      */
+
+     public function edit($id)
+    {
+        $project = Projects::findOrFail($id);
+        $userId = Auth::id();
+
+        // Check if the user is the project owner or has an accepted collaboration
+        $isOwner = $project->user_id == $userId;
+        $isCollaborator = $project->collaborations()
+                                ->where('designer_id', $userId)
+                                ->where('status', 'accepted')
+                                ->exists();
+
+        if (!$isOwner && !$isCollaborator) {
+            return redirect()->route('projects.index')->with('error', 'Unauthorized access to edit the project.');
+        }
+
+        return view('projects.edit', compact('project'));
+    }
+
+
     public function update(Request $request, Collaborations $collaboration)
     {
         $request->validate([
@@ -79,6 +100,8 @@ class CollaborationsController extends Controller
 
         return view('collaborations.index', compact('collaborationRequests'));
     }
+
+    
 
 
     /**

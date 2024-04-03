@@ -47,6 +47,10 @@
                         <button id="toggleCollabRequests" class="mt-4 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded cursor-pointer">
                             View Collaboration Requests
                         </button>
+
+                        @if(Auth::user()->role === 'CLIENT' && Auth::id() === $project->user_id)
+                        <a href="{{ route('projects.edit', $project) }}" class="bg-blue-500 text-white px-4 py-2.5 rounded hover:bg-blue-600">Edit</a>
+                        @endif
                         <div id="collabRequestsSection" class="hidden">
                             <h2 class="mt-4 text-lg font-semibold">Collaboration Requests</h2>
                             @forelse ($collaborationRequests as $request)

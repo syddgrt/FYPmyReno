@@ -25,6 +25,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/about', function () {
+    return view('about');
+});
+
+Route::get('/services', function () {
+    return view('services');
+});
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -36,6 +44,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/projects/client', [ProjectsController::class, 'clientProjects'])->name('projects.client');
     Route::get('/projects/{project}', [CollaborationsController::class, 'show'])->name('projects.show');
     Route::get('/projects/{id}/edit', [ProjectsController::class, 'edit'])->name('projects.edit');
+    Route::delete('/projects/{project}', [ProjectsController::class, 'destroy'])->name('projects.destroy');
+
 
     
 
@@ -57,17 +67,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/conversations/start/{recipientId}', [MessageController::class, 'startConversation'])->name('conversations.start');
 
     Route::post('/collaborations', [CollaborationsController::class, 'store'])->name('collaborations.store');
+    Route::get('/collaborations/{id}/edit', [CollaborationsController::class, 'edit'])->name('collaborations.edit');
+    Route::put('/collaborations/destroy}', [CollaborationsController::class, 'destroy'])->name('collaborations.destroy');
 
     // Route::post('/conversations/start/{recipientId}', [MessageController::class, 'startConversation'])->name('conversations.start');
 
     Route::get('/collaboration-requests', [CollaborationsController::class, 'index'])->name('collaborations.index');
+    // Route::get('/collaboration-requests', [CollaborationsController::class, 'edit'])->name('collaborations.edit');
     Route::put('/collaborations/{collaboration}', [CollaborationsController::class, 'update'])->name('collaborations.update');
+    // Route::put('/collaborations/{collaboration}', [CollaborationsController::class, 'destroy'])->name('collaborations.destroy');
+    // Route::put('/collaborations/{collaboration}', [CollaborationsController::class, 'update'])->name('collaborations.update');
 
     Route::get('/finances', [FinancesController::class, 'index'])->name('finances.index');
+    Route::get('finances/{projectId}', [FinancesController::class, 'show'])->name('finances.show');
+    // Show the form to edit existing financial data
+    Route::get('/finances/{id}/edit', [FinancesController::class, 'edit'])->name('finances.edit');
+    Route::get('/finances/create', [FinancesController::class, 'create'])->name('finances.create');
+
 
 // Show the form to create new financial data
     // Show the form to create new financial data
-Route::get('/finances/create', [FinancesController::class, 'create'])->name('finances.create');
+
 
 // Store new financial data
 Route::post('/finances', [FinancesController::class, 'store'])->name('finances.store');

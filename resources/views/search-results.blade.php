@@ -14,6 +14,7 @@
                     <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6 mb-4">
                         <h3 class="text-xl font-semibold mb-2">{{ $result->title }}</h3>
                         <p class="text-gray-700 dark:text-gray-300">{{ $result->description }}</p>
+                        
                     </div>
                 @endforeach
             @endif

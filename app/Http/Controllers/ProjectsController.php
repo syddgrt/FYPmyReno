@@ -132,6 +132,9 @@ class ProjectsController extends Controller
         return view('projects.edit', compact('project'));
     }
 
+    
+
+
 
     /**
      * Update the specified resource in storage.

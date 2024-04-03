@@ -25,7 +25,7 @@ class Projects extends Model
 
     public function collaborations()
     {
-        return $this->hasMany(Collaborations::class);
+        return $this->hasMany(Collaborations::class, 'project_id', 'id');
     }
 
     public function canBeEditedByUser($user)

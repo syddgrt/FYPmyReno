@@ -13,19 +13,17 @@
                     <form action="{{ route('finances.store') }}" method="POST">
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                            <!-- Project ID (assuming a dropdown selection) -->
+                            <!-- Project Title -->
                             <div>
-                                <label for="project_id" class="block text-sm font-medium text-black-700">Project ID</label>
-                                <select id="project_id" name="project_id" class="mt-1 block w-full ...">
-                                    @forelse ($projects as $project)
-                                        <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                <label for="project_title" class="block text-sm font-medium text-black-700">Project Title</label>
+                                <select id="project_title" name="project_title" class="mt-1 block w-full text-black ...">
+                                    @forelse ($projects as $projectId => $projectName)
+                                        <option value="{{ $projectName }}">{{ $projectName }}</option>
                                     @empty
                                         <option>No projects available</option>
                                     @endforelse
                                 </select>
-
-
-
+                                <input type="hidden" id="project_id" name="project_id">
                             </div>
 
                             <!-- Cost Estimation -->
@@ -66,8 +64,11 @@
 </x-app-layout>
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Your existing script for the analytics chart
+        // JavaScript to assign project ID based on selected project title
+        document.getElementById('project_title').addEventListener('change', function() {
+            var projectId = this.options[this.selectedIndex].value;
+            document.getElementById('project_id').value = projectId;
+        });
     </script>
 @endpush

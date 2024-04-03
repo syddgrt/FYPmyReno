@@ -27,26 +27,33 @@
                 @endif
             @else
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    @foreach ($projects as $project)
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6">
-                                <h3 class="font-semibold text-lg mb-2">{{ $project->title }}</h3>
-                                <p class="text-gray-600 mb-2">Status: {{ $project->status }}</p>
-                                @if ($project->attachments->isNotEmpty())
-                                    <div class="mt-2">
-                                        <img src="{{ asset($project->attachments->first()->file_path) }}" alt="Project Image" class="w-full h-auto">
-                                    </div>
-                                @else
-                                    <p class="text-gray-400 mt-2">No image attachment available.</p>
-                                @endif
-                                
+                @foreach ($projects as $project)
+    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="p-6">
+            <h3 class="font-semibold text-lg mb-2">{{ $project->title }}</h3>
+            <p class="text-gray-600 mb-2">Status: {{ $project->status }}</p>
+            @if ($project->attachments->isNotEmpty())
+                <div class="mt-2">
+                    <img src="{{ asset($project->attachments->first()->file_path) }}" alt="Project Image" class="w-full h-auto">
+                </div>
+            @else
+                <p class="text-gray-400 mt-2">No image attachment available.</p>
+            @endif
 
+            <a href="{{ route('projects.show', $project) }}" class="text-blue-500 hover:text-blue-700 mt-2 block">View Project Details</a>
+            <br>
+            @if(Auth::user()->role === 'CLIENT' && Auth::id() === $project->user_id)
+            <a href="{{ route('projects.edit', $project) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
+            <form action="{{ route('projects.destroy', $project) }}" method="POST" class="inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="bg-red-500 text-white px-4 py-1.5 rounded hover:bg-red-600">Delete</button>
+            </form>
+            @endif
+        </div>
+    </div>
+@endforeach
 
-
-                                <a href="{{ route('projects.show', $project) }}" class="text-blue-500 hover:text-blue-700 mt-2 block">View Project Details</a>
-                            </div>
-                        </div>
-                    @endforeach
                 </div>
             @endif
         </div>

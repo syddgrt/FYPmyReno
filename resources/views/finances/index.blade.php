@@ -23,6 +23,7 @@
                                 <thead>
                                     <tr class="bg-gray-200">
                                         <th class="border border-gray-600 px-4 py-2">Project ID</th>
+                                        <th class="border border-gray-600 px-4 py-2">Project Title</th>
                                         <th class="border border-gray-600 px-4 py-2">Cost Estimation</th>
                                         <th class="border border-gray-600 px-4 py-2">Actual Cost</th>
                                         <th class="border border-gray-600 px-4 py-2">Tax</th>
@@ -34,6 +35,7 @@
                                     @foreach ($financialDatas as $data)
                                     <tr>
                                         <td class="border border-gray-600 px-4 py-2">{{ $data->project_id }}</td>
+                                        <td class="border border-gray-600 px-4 py-2">{{ $data->project->title }}</td>
                                         <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->cost_estimation, 2) }}</td>
                                         <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->actual_cost, 2) }}</td>
                                         <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->tax, 2) }}</td>

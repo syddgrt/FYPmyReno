@@ -7,7 +7,7 @@
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6">
                 @foreach ($designers as $designer)
                     <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-lg sm:rounded-lg p-4 hover:shadow-2xl transition-shadow duration-300">
                         <a href="{{ route('designers.portfolio', $designer->id) }}" class="text-lg font-semibold hover:underline text-gray-800 dark:text-gray-100">

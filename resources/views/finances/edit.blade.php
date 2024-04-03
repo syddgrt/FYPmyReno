@@ -1,3 +1,5 @@
+<!-- edit.blade.php -->
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -9,40 +11,50 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('finances.update', $financialData->id) }}" method="POST">
+                    <!-- Form for Editing Financial Data -->
+                    <form action="{{ route('finances.update', $finance->id) }}" method="POST">
                         @csrf
                         @method('PUT')
-
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <!-- Project Title -->
+                            <div>
+                                <label for="project_title" class="block text-sm font-medium text-black-700">Project Title</label>
+                                <select id="project_title" name="project_title" class="mt-1 block w-full text-black ...">
+                                    @foreach ($projects as $projectId => $projectName)
+                                        <option value="{{ $projectId }}" @if ($finance->project_id == $projectId) selected @endif>{{ $projectName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <!-- Cost Estimation -->
                             <div>
                                 <label for="cost_estimation" class="block text-sm font-medium text-gray-700">Cost Estimation</label>
-                                <input type="number" name="cost_estimation" id="cost_estimation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{ $financialData->cost_estimation }}" required>
+                                <input type="number" name="cost_estimation" id="cost_estimation" value="{{ $finance->cost_estimation }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
 
                             <!-- Actual Cost -->
                             <div>
                                 <label for="actual_cost" class="block text-sm font-medium text-gray-700">Actual Cost</label>
-                                <input type="number" name="actual_cost" id="actual_cost" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{ $financialData->actual_cost }}" required>
+                                <input type="number" name="actual_cost" id="actual_cost" value="{{ $finance->actual_cost }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
 
                             <!-- Tax -->
                             <div>
                                 <label for="tax" class="block text-sm font-medium text-gray-700">Tax</label>
-                                <input type="number" name="tax" id="tax" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{ $financialData->tax }}" required>
+                                <input type="number" name="tax" id="tax" value="{{ $finance->tax }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
 
                             <!-- Additional Fees -->
                             <div>
                                 <label for="additional_fees" class="block text-sm font-medium text-gray-700">Additional Fees</label>
-                                <input type="number" name="additional_fees" id="additional_fees" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{ $financialData->additional_fees }}" required>
+                                <input type="number" name="additional_fees" id="additional_fees" value="{{ $finance->additional_fees }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
-                            <x-button class="ml-4">
-                                {{ __('Update') }}
-                            </x-button>
+                            <button type="submit" class="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Update Financial Data
+                            </button>
                         </div>
                     </form>
                 </div>

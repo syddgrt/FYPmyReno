@@ -45,8 +45,10 @@ class FinancesController extends Controller
 
     public function edit($id)
     {
-        $financialData = FinancialData::findOrFail($id); // Fetch the finance data entry
-        return view('finances.edit', compact('financialData')); // Return the edit view
+        $finance = FinancialData::findOrFail($id); // Assuming Finance is your model name
+        $projects = Projects::where('user_id', Auth::id())->pluck('title', 'id');
+
+        return view('finances.edit', compact('finance', 'projects'));
     }
 
 
@@ -68,14 +70,15 @@ class FinancesController extends Controller
 
     public function create()
     {
-        $projects = Projects::where('user_id', Auth::id())->get();
+        $projects = Projects::where('user_id', Auth::id())->pluck('title', 'id');
 
         if ($projects->isEmpty()) {
             return back()->with('error', 'No projects found.');
         }
-    
+
         return view('finances.create', compact('projects'));
     }
+
 
     public function store(Request $request)
 {
@@ -99,6 +102,20 @@ class FinancesController extends Controller
     // Redirect back or to another page after successful creation
     return redirect()->route('finances.index')->with('success', 'Financial data added successfully.');
 }
+    public function show($projectId)
+    {
+        // Retrieve financial data for the project
+        $finance = FinancialData::where('project_id', $projectId)->firstOrFail();
+
+        // Retrieve project details
+        $project = Projects::findOrFail($projectId);
+
+        // Pass the data to the view
+        return view('finances.show', compact('finance', 'project'));
+    }
+
+    
+
 
 
 
