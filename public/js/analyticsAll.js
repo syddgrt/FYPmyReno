@@ -1,16 +1,13 @@
-// analytics.js
-
-// import Chart from 'chart.js/auto';
-
-document.addEventListener("DOMContentLoaded", function () {
-    var ctx = document.getElementById('analyticsChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+document.addEventListener('DOMContentLoaded', function() {
+    // Use financial data sums to render the chart
+    const ctx = document.getElementById('analyticsChart').getContext('2d');
+    const analyticsChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Cost Estimation', 'Actual Cost', 'Tax', 'Additional Fees'],
             datasets: [{
-                label: 'Cost Estimation', 
-                data: [costEstimation, actualCost, tax, additionalFees],
+                label: 'Financial Data',
+                data: [totalCostEstimation, totalActualCost, totalTax, totalAdditionalFees],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -23,21 +20,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)'
                 ],
-                borderWidth: 1,
-                // Remove the legend
-                // hidden: true
+                borderWidth: 1
             }]
         },
         options: {
             scales: {
                 y: {
                     beginAtZero: true
-                }
-            },
-            // Remove the legend
-            plugins: {
-                legend: {
-                    display: false
                 }
             }
         }

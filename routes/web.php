@@ -8,7 +8,7 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CollaborationsController;
 use App\Http\Controllers\FinancesController;
-
+use App\Http\Controllers\SchedulesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +35,8 @@ Route::get('/services', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/search', [DashboardController::class, 'search'])->name('dashboard.search');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -43,7 +45,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/projects/create', [ProjectsController::class, 'create'])->name('projects.create');
     Route::get('/projects/client', [ProjectsController::class, 'clientProjects'])->name('projects.client');
     Route::get('/projects/{project}', [CollaborationsController::class, 'show'])->name('projects.show');
-    Route::get('/projects/{id}/edit', [ProjectsController::class, 'edit'])->name('projects.edit');
+    Route::get('/projects/{id}/edit', [ProjectsController::class, 'edit'])->name('projects.editForm');
+
     Route::delete('/projects/{project}', [ProjectsController::class, 'destroy'])->name('projects.destroy');
 
 
@@ -73,30 +76,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::post('/conversations/start/{recipientId}', [MessageController::class, 'startConversation'])->name('conversations.start');
 
     Route::get('/collaboration-requests', [CollaborationsController::class, 'index'])->name('collaborations.index');
-    // Route::get('/collaboration-requests', [CollaborationsController::class, 'edit'])->name('collaborations.edit');
     Route::put('/collaborations/{collaboration}', [CollaborationsController::class, 'update'])->name('collaborations.update');
     // Route::put('/collaborations/{collaboration}', [CollaborationsController::class, 'destroy'])->name('collaborations.destroy');
     // Route::put('/collaborations/{collaboration}', [CollaborationsController::class, 'update'])->name('collaborations.update');
 
     Route::get('/finances', [FinancesController::class, 'index'])->name('finances.index');
-    Route::get('finances/{projectId}', [FinancesController::class, 'show'])->name('finances.show');
-    // Show the form to edit existing financial data
-    Route::get('/finances/{id}/edit', [FinancesController::class, 'edit'])->name('finances.edit');
+    Route::get('finances/{projectId}', [FinancesController::class, 'show'])->name('finances.show');   
+    Route::get('/finances/{id}/edit', [FinancesController::class, 'edit'])->name('finances.edit'); 
+    Route::put('/finances/{id}', [FinancesController::class, 'update'])->name('finances.update');
     Route::get('/finances/create', [FinancesController::class, 'create'])->name('finances.create');
+    Route::post('/finances', [FinancesController::class, 'store'])->name('finances.store');
+
+    Route::get('/appointments', [SchedulesController::class, 'create'])->name('appointments.create');
+    Route::post('/appointments', [SchedulesController::class, 'store'])->name('schedules.store');
+    Route::get('appointments/{id}', [SchedulesController::class, 'show'])->name('appointments.show');
+
 
 
 // Show the form to create new financial data
     // Show the form to create new financial data
 
-
-// Store new financial data
-Route::post('/finances', [FinancesController::class, 'store'])->name('finances.store');
-
-// Show the form to edit existing financial data
-Route::get('/finances/{id}/edit', [FinancesController::class, 'edit'])->name('finances.edit');
-
-// Update existing financial data
-Route::put('/finances/{id}', [FinancesController::class, 'update'])->name('finances.update');
 
 
 
@@ -107,7 +106,7 @@ Route::put('/finances/{id}', [FinancesController::class, 'update'])->name('finan
 
 });
 
-Route::get('/dashboard/search', [DashboardController::class, 'search'])->name('dashboard.search');
+
 
 require __DIR__.'/auth.php';
 

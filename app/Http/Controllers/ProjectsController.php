@@ -56,36 +56,40 @@ class ProjectsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectsRequest $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'attachments.*' => 'nullable|file|max:10240', // Adjust the max file size as needed
-        ]);
 
-        // Create a new project instance
-        $project = new Projects();
-        $project->user_id = Auth::id();
-        $project->title = $request->input('title');
-        $project->description = $request->input('description');
-        $project->save(); // Save the project first
+public function store(StoreProjectsRequest $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'attachments.*' => 'nullable|image|mimes:jpeg,png,jpg|max:10240', // Only allow image files with specified extensions and max size of 10MB
+    ]);
 
-        // Handle attachments
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $attachmentPath = $file->store('attachments');
-                $attachment = new ProjectAttachment();
-                $attachment->project_id = $project->id; // Use the project's id after it has been saved
-                $attachment->file_path = $attachmentPath;
-                $attachment->type = 'default'; // Set a default value for the type
-                $attachment->save();
-            }
+    // Create a new project instance
+    $project = new Projects();
+    $project->user_id = Auth::id();
+    $project->title = $request->input('title');
+    $project->description = $request->input('description');
+    $project->save(); // Save the project first
+
+    // Handle attachments
+    if ($request->hasFile('attachments')) {
+        foreach ($request->file('attachments') as $file) {
+            $attachmentPath = $file->store('public/attachments');
+            // If you want to remove the 'public' part from the storage path in the database, you can do so
+            $attachmentPath = str_replace('public/', '', $attachmentPath);
+            $attachment = new ProjectAttachment();
+            $attachment->project_id = $project->id; // Use the project's id after it has been saved
+            $attachment->file_path = $attachmentPath;
+            $attachment->type = 'default'; // Set a default value for the type
+            $attachment->save();
         }
-
-        // Redirect the user to a relevant page
-        return redirect()->route('projects.index')->with('success', 'Project created successfully!');
     }
+
+    // Redirect the user to a relevant page
+    return redirect()->route('projects.index')->with('success', 'Project created successfully!');
+}
+
 
 
 
@@ -133,9 +137,6 @@ class ProjectsController extends Controller
     }
 
     
-
-
-
     /**
      * Update the specified resource in storage.
      */

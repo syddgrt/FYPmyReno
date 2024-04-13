@@ -21,7 +21,7 @@
     <x-input-label for="role" :value="__('User Type')" />
     <select id="role" name="role" class="block mt-1 w-full" required>
         <option value="" disabled selected>Select your user type</option>
-        <option value="DESIGNER">Designer/Contractors</option>
+        <option value="DESIGNER">Designer</option>
         <option value="CLIENT">Clients</option>
     </select>
     <x-input-error :messages="$errors->get('role')" class="mt-2" />

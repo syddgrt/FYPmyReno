@@ -2,11 +2,10 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Show Portfolio') }}
-
-                
-                <a href="{{ route('portfolios.modify') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modify Portfolio</a>
-                
+                {{ __('Show Portfolio') }} 
+                <div class="mt-4">
+                <a href="{{ route('portfolios.modify') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded">Modify Portfolio</a>
+                </div>
             </h2>
         </div>
         
@@ -16,14 +15,13 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Portfolio Title and Description -->
             <div class="mb-8">
-                <h1 class="text-2xl text-gray font-bold">{{ $portfolio->title }}</h1>
-                <p class="mt-4">{{ $portfolio->description }}</p>
+                <h1 class="text-2xl text-white font-bold">{{ $portfolio->title }}</h1>
+                <p class="mt-4 text-white">{{ $portfolio->description }}</p>
             </div>
             <!-- Portfolio Items -->
-            My portfolio
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach($portfolio->items as $item)
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="bg-white dark:bg-white-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
                             @if ($item->type === 'image')
                                 <img src="{{ Storage::url($item->content) }}" alt="Portfolio Image" class="w-full h-auto mb-4">

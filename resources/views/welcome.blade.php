@@ -121,7 +121,7 @@
                   <div class="item">
                     <h3 class="mb-3">Let's grow your business together</h3>
                     <h4 class="mb-3">Helps designers and tenders to find potential clients!</h4>
-                    <p>The system is designed with the focus on helping designers advertise their skills in the system. Allowing ease of communication for clients to find their designers.</p>
+                    <p>The system is designed with the focus on helping designers advertise their services in the system. Allowing ease of communication for clients to find their designers.</p>
                   </div>
                 </div><!-- End slide item -->
 
