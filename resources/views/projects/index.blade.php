@@ -1,4 +1,7 @@
-<x-app-layout>
+@extends('layouts.dashboard')
+
+@section('content')
+
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -16,6 +19,7 @@
         </div>
     </x-slot>
 
+   
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if ($projects->isEmpty())
@@ -28,6 +32,7 @@
             @else
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @foreach ($projects as $project)
+                
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6">
             <h3 class="font-semibold text-lg mb-2">{{ $project->title }}</h3>
@@ -58,4 +63,6 @@
             @endif
         </div>
     </div>
-</x-app-layout>
+
+
+@section('content')

@@ -1,5 +1,7 @@
 <!-- show.blade.php -->
+@extends('layouts.dashboard')
 
+@section('content')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script src="{{ asset('js/analytics.js') }}"></script>
@@ -63,3 +65,4 @@
 
 </x-app-layout>
 
+@endsection
