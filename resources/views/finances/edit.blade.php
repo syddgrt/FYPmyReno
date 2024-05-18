@@ -16,15 +16,16 @@
                         @csrf
                         @method('PUT')
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                            <!-- Project Title -->
+                            <!-- Project Title
                             <div>
                                 <label for="project_title" class="block text-sm font-medium text-black-700">Project Title</label>
-                                <select id="project_title" name="project_title" class="mt-1 block w-full text-black ...">
-                                    @foreach ($projects as $projectId => $projectName)
-                                        <option value="{{ $projectId }}" @if ($finance->project_id == $projectId) selected @endif>{{ $projectName }}</option>
+                                <select id="project_title" name="project_id" class="mt-1 block w-full text-black ...">
+                                    @foreach ($projects as $projectId => $projectTitle)
+                                        <option value="{{ $projectId }}" @if ($finance->project_id == $projectId) selected @endif>{{ $projectTitle }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> -->
+
 
                             <!-- Cost Estimation -->
                             <div>

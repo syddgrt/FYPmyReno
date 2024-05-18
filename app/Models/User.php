@@ -111,17 +111,21 @@ class User extends Authenticatable
         })->first();
     }
 
-    public function initiatedCollaborations()
-    {
-        return $this->hasMany(Collaboration::class, 'designer_id');
-    }
-
     /**
      * Get the collaborations initiated by the user's projects (as a client).
      */
-    public function collaborations()
-    {
-        return $this->hasManyThrough(Collaboration::class, Project::class, 'client_id', 'project_id');
-    }
-    
+  
+     const ROLE_CLIENT = 'client';
+     const ROLE_DESIGNER = 'designer';
+
+
+    // public function isClient()
+    // {
+    //     return $this->role === self::ROLE_CLIENT;
+    // }
+
+    // public function isDesigner()
+    // {
+    //     return $this->role === self::ROLE_DESIGNER;
+    // }
 }

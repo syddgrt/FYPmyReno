@@ -14,7 +14,7 @@
                         @csrf
                         <!-- Title input -->
                         <div class="mb-4">
-                            <label for="title" class="block text-sm font-medium text-black-700 dark:text-black-300">Title</label>
+                            <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
                             <input type="text" name="title" id="title" value="{{ $portfolio->title }}" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         

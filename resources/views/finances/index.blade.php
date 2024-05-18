@@ -1,3 +1,8 @@
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="{{ asset('js/analyticsAll.js') }}"></script>
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -15,10 +20,10 @@
                         <div class="overflow-x-auto">
                             <table class="table-auto border-collapse border border-gray-800 w-full">
                             <div class="mb-4 flex justify-end">
-    <a href="{{ route('finances.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Add New Financial Data
-    </a>
-</div>
+        <a href="{{ route('finances.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Add New Financial Data
+        </a>
+    </div>
 
                                 <thead>
                                     <tr class="bg-gray-200">
@@ -33,30 +38,44 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($financialDatas as $data)
-                                    <tr>
-                                        <td class="border border-gray-600 px-4 py-2">{{ $data->project_id }}</td>
-                                        <td class="border border-gray-600 px-4 py-2">{{ $data->project->title }}</td>
-                                        <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->cost_estimation, 2) }}</td>
-                                        <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->actual_cost, 2) }}</td>
-                                        <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->tax, 2) }}</td>
-                                        <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->additional_fees, 2) }}</td>
-                                        <td class="border border-gray-600 px-4 py-2">
-                                            <a href="{{ route('finances.edit', $data->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                        </td>
-                                    </tr>
+                                        @if ($data->project->client_id === auth()->id() || $data->project->collaborations()->where('designer_id', auth()->id())->exists())
+                                            <tr>
+                                                <td class="border border-gray-600 px-4 py-2">{{ $data->project_id }}</td>
+                                                <td class="border border-gray-600 px-4 py-2">{{ $data->project->title }}</td>
+                                                <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->cost_estimation, 2) }}</td>
+                                                <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->actual_cost, 2) }}</td>
+                                                <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->tax, 2) }}</td>
+                                                <td class="border border-gray-600 px-4 py-2">RM{{ number_format($data->additional_fees, 2) }}</td>
+                                                <td class="border border-gray-600 px-4 py-2">
+                                                    <a href="{{ route('finances.edit', $data->id) }}" class="bg-blue-500 text-white px-4 py-1.5 rounded hover:bg-blue-600">Edit</a>
+                                                    <a href="{{ route('finances.show', $data->project_id) }}" class="bg-green-500 text-white px-4 py-1.5 rounded hover:bg-green-600">View Finance</a>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
 
                     <!-- Data Analytics Chart Placeholder -->
+                    @if ($data->project->client_id === auth()->id() || $data->project->collaborations()->where('designer_id', auth()->id())->exists())
                     <div>
                         <h2 class="text-xl font-semibold mb-2">Data Analytics</h2>
                         <div class="bg-white border border-gray-800 rounded-lg p-4">
                             <canvas id="analyticsChart" width="400" height="200"></canvas>
                         </div>
                     </div>
+                    @endif
+
+                    <script>
+                        // Pass financial data sums to JavaScript file
+                        const totalCostEstimation = {{ $totalCostEstimation }};
+                        const totalActualCost = {{ $totalActualCost }};
+                        const totalTax = {{ $totalTax }};
+                        const totalAdditionalFees = {{ $totalAdditionalFees }};
+                    </script>
                 </div>
             </div>
         </div>

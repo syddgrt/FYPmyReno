@@ -40,6 +40,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // 'client' => [
+        //     'driver' => 'session',
+        //     'provider' => 'clients',
+        // ],
+    
+        // 'designer' => [
+        //     'driver' => 'session',
+        //     'provider' => 'designers',
+        // ],
     ],
 
     /*
@@ -68,6 +78,16 @@ return [
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
+        // ],
+
+        // 'client' => [
+        //     'driver' => 'session',
+        //     'provider' => 'clients',
+        // ],
+    
+        // 'designer' => [
+        //     'driver' => 'session',
+        //     'provider' => 'designers',
         // ],
     ],
 

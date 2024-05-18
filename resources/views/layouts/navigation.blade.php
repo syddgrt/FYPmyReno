@@ -22,33 +22,39 @@
                     </x-nav-link>
                 </div>
                 @if($userRole === 'CLIENT')
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('designers.index')" :active="request()->routeIs('designers.index')">
-                        {{ __('Designers') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('finances.index')" :active="request()->routeIs('finances.index')">
-                        {{ __('Finance') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('collaborations.index')" :active="request()->routeIs('collaborations.index')">
-                        {{ __('Collaboration') }}
-                    </x-nav-link>
-                </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('designers.index')" :active="request()->routeIs('designers.index')">
+                            {{ __('Designers') }}
+                        </x-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('finances.index')" :active="request()->routeIs('finances.index')">
+                            {{ __('Finance') }}
+                        </x-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('collaborations.index')" :active="request()->routeIs('collaborations.index')">
+                            {{ __('Collaboration') }}
+                        </x-nav-link>
+                    </div>
                 @elseif($userRole === 'DESIGNER')
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('portfolios.show')" :active="request()->routeIs('portfolios.index')">
-                        {{ __('Portfolio') }}
-                    </x-nav-link>
-                </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('portfolios.show')" :active="request()->routeIs('portfolios.show')">
+                            {{ __('Portfolio') }}
+                        </x-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('finances.index')" :active="request()->routeIs('finances.index')">
+                            {{ __('Finance') }}
+                        </x-nav-link>
+                    </div>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('collaborations.index')" :active="request()->routeIs('collaborations.index')">
-                        {{ __('Collaborations') }}
-                    </x-nav-link>
-                </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('collaborations.index')" :active="request()->routeIs('collaborations.index')">
+                            {{ __('Collaborations') }}
+                        </x-nav-link>
+                    </div>
+                    
                 @endif
             </div>
 

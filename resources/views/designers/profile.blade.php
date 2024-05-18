@@ -3,14 +3,17 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg p-6">
                 @if ($designer->portfolio)
-                <div class="mb-4">
+                <div class="mb-4 grid grid-cols-1 gap-4">
                     <h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{ $designer->name }}</h1>
                     <!-- Display other details of the designer -->
-                    <p class="text-gray-600 dark:text-gray-400">{{ $designer->email }}</p>
+                    <p class="text font-bold text-white-600 dark:text-gray-200">{{ $designer->email }}</p>
                     <!-- Add more designer information here as needed -->
-                    <p class="text-black-600 dark:text-black-600">{{ $designer->portfolio->title }}</p>
-                    <p class="text-black-600 dark:text-black-400">{{ $designer->portfolio->description }}</p>
+                    <div>
+                        <p class="text-white-600 dark:text-gray-200">{{ $designer->portfolio->title }}</p>
+                        <p class="text-white-600 dark:text-gray-400">{{ $designer->portfolio->description }}</p>
+                    </div>
                 </div>
+
 
                 <!-- Add button to start conversation --> 
                 <form method="POST" action="{{ route('conversations.start', ['recipientId' => $designer->id]) }}" class="mb-4"> @csrf 

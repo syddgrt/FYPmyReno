@@ -40,4 +40,9 @@ class Collaborations extends Model
     {
         return $this->belongsTo(Projects::class);
     }
+
+    public function appointment()
+    {
+        return $this->hasOne(Schedules::class, 'collaboration_id');
+    }
 }

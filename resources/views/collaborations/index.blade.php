@@ -1,5 +1,3 @@
-<!-- index.blade.php -->
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -34,31 +32,25 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $request->project_id }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $request->project->title }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ Auth::user()->role === 'CLIENT' ? $request->designer->email : $request->client->email }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($request->status) }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $request->project->status }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if(Auth::user()->role === 'CLIENT')
-                                            @if($request->status === 'pending')
-                                                <form action="{{ route('collaborations.update', $request->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <button type="submit" name="status" value="accepted" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Accept</button>
-                                                    <button type="submit" name="status" value="rejected" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Reject</button>
-                                                </form>
+                                        @if($request->status === 'accepted')
+                                            <a href="{{ route('projects.edit', $request->project_id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
+                                            <a href="{{ route('finances.show', $request->project_id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View Finance</a>
+                                            @if($request->appointment)
+                                                <!-- Show appointment dropdown button only if there's an appointment -->
+                                                <div class="relative inline-block text-left">
+                                                    <a href="{{ route('appointments.show', $request->appointment->id) }}" class="bg-yellow-500 text-white px-2 py-2 rounded hover:bg-yellow-600">
+                                                        View Appointment
+                                                    </a>
+                                                </div>
                                             @else
-                                                {{ ucfirst($request->status) }}
+                                                <a href="{{ route('appointments.create', ['collaboration_id' => $request->id, 'project_id' => $request->project_id]) }}" class="bg-yellow-500 text-white px-2 py-2 rounded hover:bg-yellow-600">
+                                                    Set Appointment
+                                                </a>
                                             @endif
-                                        @else
-                                            {{ ucfirst($request->status) }}
                                         @endif
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $request->project->status }}</td> <!-- Display Project Status -->
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <a href="{{ route('projects.edit', $request->project_id) }}" class="bg-blue-500 text-white px-4 py-3 rounded hover:bg-blue-600">Edit</a>
-                                        <a href="{{ route('finances.show', $request->project_id) }}" class="bg-green-500 text-white px-4 py-3 rounded hover:bg-green-600">View Finance</a>
-                                        <form action="{{ route('collaborations.destroy', $request->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="bg-red-500 text-white px-3 py-2.5 rounded hover:bg-red-600">Delete</button>
-                                        </form>
                                     </td>
                                 </tr>
                             @empty

@@ -6,19 +6,31 @@ use Illuminate\Http\Request;
 use App\Models\FinancialData;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Projects; // Correct reference if your model is named Project
+use App\Models\Collaborations;
 
 class FinancesController extends Controller
 {
     public function index()
     {
-        $userId = Auth::id(); // Assuming you want to fetch projects related to the logged-in user
-        // Assuming you want to show all financial data, adjust the query as needed
+        $userId = Auth::id(); // Get the logged-in user's ID
         $financialDatas = FinancialData::whereHas('project', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
+            $query->where(function ($q) use ($userId) {
+                $q->where('user_id', $userId) // Filter by projects created by the current user
+                  ->orWhereHas('collaborations', function ($query) use ($userId) {
+                      $query->where('designer_id', $userId)->where('status', 'accepted'); // Filter by projects the current user is collaborating on
+                  });
+            });
         })->get();
+
+        $financialDatas = FinancialData::all();
         
-        // Pass the financialDatas variable to the view
-        return view('finances.index', compact('financialDatas'));
+        // Calculate sums of financial data
+        $totalCostEstimation = $financialDatas->sum('cost_estimation');
+        $totalActualCost = $financialDatas->sum('actual_cost');
+        $totalTax = $financialDatas->sum('tax');
+        $totalAdditionalFees = $financialDatas->sum('additional_fees');
+        
+        return view('finances.index', compact('financialDatas','totalCostEstimation', 'totalActualCost', 'totalTax', 'totalAdditionalFees'));
     }
 
 
@@ -67,41 +79,28 @@ class FinancesController extends Controller
         // Redirect to a relevant page with a success message
         return redirect()->route('some.route')->with('success', 'Financial data updated successfully!');
     }
-
     public function create()
     {
-        $projects = Projects::where('user_id', Auth::id())->pluck('title', 'id');
-
-        if ($projects->isEmpty()) {
-            return back()->with('error', 'No projects found.');
-        }
+        // Retrieve projects for selection
+        $projects = Projects::pluck('title', 'id');
 
         return view('finances.create', compact('projects'));
     }
 
-
     public function store(Request $request)
-{
-    $request->validate([
-        'project_id' => 'required|integer|exists:projects,id',
-        'cost_estimation' => 'required|numeric',
-        'actual_cost' => 'required|numeric',
-        'tax' => 'required|numeric',
-        'additional_fees' => 'required|numeric',
-    ]);
+    {
+        $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'cost_estimation' => 'required|numeric',
+            'actual_cost' => 'required|numeric',
+            'tax' => 'required|numeric',
+            'additional_fees' => 'required|numeric',
+        ]);
 
-    FinancialData::create([
-        'project_id' => $request->input('project_id'),
-        'cost_estimation' => $request->input('cost_estimation', 0), // Providing a default value as an example
-        'actual_cost' => $request->input('actual_cost', 0),
-        'tax' => $request->input('tax', 0),
-        'additional_fees' => $request->input('additional_fees', 0),
-    ]);
-    
+        FinancialData::create($request->all());
 
-    // Redirect back or to another page after successful creation
-    return redirect()->route('finances.index')->with('success', 'Financial data added successfully.');
-}
+        return redirect()->route('finances.index')->with('success', 'Financial data added successfully.');
+    }
     public function show($projectId)
     {
         // Retrieve financial data for the project

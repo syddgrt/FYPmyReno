@@ -27,17 +27,31 @@ class DashboardController extends Controller{
 
     public function search(Request $request)
     {
-        // Get the search query from the request
-        $query = $request->input('query');
+        $search = $request->input('search');
+        
+        $designers = User::where('role', 'DESIGNER')
+                         ->when($search, function ($query, $search) {
+                             return $query->where('name', 'like', '%' . $search . '%')
+                                          ->orWhere('email', 'like', '%' . $search . '%');
+                         })
+                         ->get();
 
-        // Perform the search using the Project model
-        $results = Projects::where('title', 'like', "%$query%")
-                          ->orWhere('description', 'like', "%$query%")
-                          ->get();
-
-        // Pass the search results to the view
-        return view('search-results', ['results' => $results]);
+        return view('designers.index', compact('designers'));
     }
+
+    // public function search(Request $request)
+    // {
+    //     // Get the search query from the request
+    //     $query = $request->input('query');
+
+    //     // Perform the search using the Project model
+    //     $results = Projects::where('title', 'like', "%$query%")
+    //                       ->orWhere('description', 'like', "%$query%")
+    //                       ->get();
+
+    //     // Pass the search results to the view
+    //     return view('search-results', ['results' => $results]);
+    // }
 
     public function showDesigners()
     {
