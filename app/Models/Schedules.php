@@ -19,4 +19,9 @@ class Schedules extends Model
     {
         return $this->belongsTo(Collaborations::class);
     }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
 }

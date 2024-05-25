@@ -6,24 +6,56 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request; // Import the correct Request class
 use App\Models\Projects; // Assuming Project model exists
 use App\Models\User;
+use App\Models\Collaborations;
+use App\Models\FinancialData;
+use App\Models\Schedules;
 
 class DashboardController extends Controller{
 
     public function index()
-    {
-        $user = Auth::user();
-        $userRole = $user->role; // Assuming 'role' is the column in your users table that stores user role
-        // dd($userRole); // Check if $userRole is correctly retrieved
-        return view('dashboard', ['userRole' => $userRole]);
+{
+    $user = Auth::user();
+    $userRole = $user->role;
+
+    $activeCollaborations = [];
+    if ($userRole === 'CLIENT') {
+        // Fetch projects with active collaborations for clients
+        $activeCollaborations = Projects::where('user_id', $user->id)
+            ->whereHas('collaborations', function($query) {
+                $query->where('status', 'accepted');
+            })
+            ->with(['collaborations' => function($query) {
+                $query->where('status', 'accepted')
+                      ->with('projectSchedules');
+            }, 'financialData'])
+            ->get();
+
+        // Debugging output
+        logger()->info('Client active collaborations:', $activeCollaborations->toArray());
+    } elseif ($userRole === 'DESIGNER') {
+        // Fetch active collaborations for designers
+        $activeCollaborations = Collaborations::where('designer_id', $user->id)
+            ->where('status', 'accepted')
+            ->with(['project' => function($query) {
+                $query->with(['financialData', 'collaborations.projectSchedules']);
+            }, 'projectSchedules']) // Load project schedules directly from collaborations
+            ->get();
+
+        // Debugging output
+        logger()->info('Designer active collaborations:', $activeCollaborations->toArray());
     }
 
-    // public function nav()
-    // {
-    //     $user = Auth::user();
-    //     $userRole = $user->role; // Assuming 'role' is the column in your users table that stores user role
-    //     // dd($userRole); // Check if $userRole is correctly retrieved
-    //     return view('navigation', compact('userRole'));
-    // }
+    return view('dashboard', [
+        'userRole' => $userRole,
+        'activeCollaborations' => $activeCollaborations
+    ]);
+}
+
+
+
+
+
+
 
     public function search(Request $request)
     {

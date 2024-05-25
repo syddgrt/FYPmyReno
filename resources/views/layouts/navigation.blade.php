@@ -21,6 +21,11 @@
                         {{ __('Projects') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('messenger')" :active="request()->routeIs('messenger')">
+                        {{ __('Messages') }}
+                    </x-nav-link>
+                </div>
                 @if($userRole === 'CLIENT')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('designers.index')" :active="request()->routeIs('designers.index')">
@@ -39,16 +44,16 @@
                     </div>
                 @elseif($userRole === 'DESIGNER')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('portfolios.show')" :active="request()->routeIs('portfolios.show')">
+                        <x-nav-link :href="route('portfolios.show', Auth::user()->id)" :active="request()->routeIs('portfolios.show')">
                             {{ __('Portfolio') }}
                         </x-nav-link>
+
                     </div>
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('finances.index')" :active="request()->routeIs('finances.index')">
                             {{ __('Finance') }}
                         </x-nav-link>
                     </div>
-
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('collaborations.index')" :active="request()->routeIs('collaborations.index')">
                             {{ __('Collaborations') }}

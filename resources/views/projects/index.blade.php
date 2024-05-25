@@ -1,5 +1,4 @@
-
-<title> myReno - Projects</title>
+<title>myReno - Projects</title>
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
@@ -20,6 +19,12 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <form action="{{ route('projects.index') }}" method="GET">
+                <div class="mb-4 flex">
+                    <input type="text" name="search" class="px-4 py-2 border border-gray-300 rounded-md" placeholder="Search Projects..." value="{{ request('search') }}">
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ml-2">Search</button>
+                </div>
+            </form>
             @if ($projects->isEmpty())
                 <p class="text-gray-600">No projects available.</p>
             @else
@@ -28,11 +33,18 @@
                         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div class="p-6">
                                 <h3 class="font-semibold text-lg mb-2">{{ $project->title }}</h3>
-                                <p class="text-gray-600 mb-2">Status: {{ $project->status }}</p>
+                                <p class="text-gray-600 mb-2">
+                                    Status:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        @if ($project->status === 'Pending') bg-red-300 text-red-800 @elseif ($project->status === 'In View') bg-yellow-300 text-yellow-800 @elseif ($project->status === 'Finished') bg-green-300 text-green-800 @endif">
+                                        {{ $project->status }}
+                                    </span>
+                                </p>
+                                <p class="text-gray-600 mb-2">Budget: RM{{ $project->budget }}</p> <!-- Displaying budget -->
                                 @if ($project->attachments->isNotEmpty())
                                     <div class="mt-2">
                                         @foreach($project->attachments as $attachment)
-                                            <img src="{{ asset('storage/' . $attachment->file_path) }}" alt="Image">
+                                            <img src="{{ asset('storage/' . $attachment->file_path) }}" alt="Image" class="w-full h-auto">
                                         @endforeach
                                     </div>
                                 @else
@@ -45,7 +57,7 @@
                                     <form action="{{ route('projects.destroy', $project) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="bg-red-500 text-white px-4 py-1.5 rounded hover:bg-red-600">Delete</button>
+                                        <button type="submit" class="bg-red-500 text-white px-4 py-1.5 rounded hover:bg-red-600 mt-2">Delete</button> <!-- Delete button -->
                                     </form>
                                 @endif
                             </div>

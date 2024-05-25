@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Cost Estimation', 'Actual Cost', 'Tax', 'Additional Fees'],
+            labels: ['Proposed Cost', 'Estimation Cost', 'Tax', 'Additional Fees'],
             datasets: [{
                 label: 'Financial Data',
                 data: [costEstimation, actualCost, tax, additionalFees],

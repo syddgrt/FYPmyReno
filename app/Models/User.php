@@ -7,9 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Cmgmyr\Messenger\Traits\Messagable;
-use App\Models\Conversation;
 use Illuminate\Support\Facades\Auth;
-// use Cmgmyr\Messenger\Models\Conversation; // Update the namespace
 
 class User extends Authenticatable
 {
@@ -19,7 +17,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $fillable = [
         'name',
@@ -31,7 +29,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -41,7 +39,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be cast.
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -57,18 +55,29 @@ class User extends Authenticatable
     public function projects()
     {
         return $this->hasMany(Projects::class);
-        
     }
 
     // Check if the user is a designer
     public function isDesigner()
     {
-        return $this->role === 'Designer';
+        return $this->role === 'designer';
+    }
+
+    // Check if the user is a client
+    public function isClient()
+    {
+        return $this->role === 'client';
+    }
+
+    // Check if the user is an admin
+    public function isAdmin()
+    {
+        return $this->role === 'ADMIN';
     }
 
     public function conversations()
     {
-        return $this->hasMany(Conversation::class, 'user_id'); // Fix the namespace here
+        return $this->hasMany(Conversation::class, 'user_id');
     }
 
     public function messages()
@@ -76,11 +85,20 @@ class User extends Authenticatable
         return $this->hasMany(Conversation::class, 'user_id');
     }
 
-    // public function portfolio()
-    // {
-    //     return $this->hasOne(Portfolio::class, 'user_id');
-    // }
+    public function collaborations()
+    {
+        return $this->hasMany(Collaborations::class);
+    }
 
+    public function financialData()
+    {
+        return $this->hasOne(FinancialData::class);
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'project_id');
+    }
 
     public function findConversation($recipientId)
     {
@@ -111,21 +129,14 @@ class User extends Authenticatable
         })->first();
     }
 
-    /**
-     * Get the collaborations initiated by the user's projects (as a client).
-     */
-  
-     const ROLE_CLIENT = 'client';
-     const ROLE_DESIGNER = 'designer';
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Reviews::class, 'designer_id');
+    }
 
+    public function reviewsGiven()
+    {
+        return $this->hasMany(Reviews::class, 'client_id');
+    }
 
-    // public function isClient()
-    // {
-    //     return $this->role === self::ROLE_CLIENT;
-    // }
-
-    // public function isDesigner()
-    // {
-    //     return $this->role === self::ROLE_DESIGNER;
-    // }
 }

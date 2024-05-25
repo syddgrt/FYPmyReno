@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('title');
             $table->text('description');
+            $table->decimal('budget', 10, 2)->default(0); // Add budget column
             $table->string('status')->default(ProjectStatus::OPEN->value);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

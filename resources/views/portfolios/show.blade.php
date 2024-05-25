@@ -4,15 +4,14 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Show Portfolio') }} 
                 <div class="mt-4">
-                <a href="{{ route('portfolios.modify') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded">Modify Portfolio</a>
+                    <a href="{{ route('portfolios.modify') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded">Modify Portfolio</a>
                 </div>
             </h2>
         </div>
-        
     </x-slot>
 
     <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Portfolio Title and Description -->
             <div class="mb-8">
                 <h1 class="text-2xl text-white font-bold">{{ $portfolio->title }}</h1>
@@ -30,6 +29,12 @@
                             @endif
                             <h3 class="text-xl font-semibold">{{ $item->title }}</h3>
                             <p>{{ $item->description }}</p>
+                            <!-- Delete Button -->
+                            <form action="{{ route('portfolio.items.delete', ['item' => $item->id]) }}" method="POST" class="mt-4">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete Item</button>
+                            </form>
                         </div>
                     </div>
                 @endforeach

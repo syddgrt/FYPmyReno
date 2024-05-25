@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Projects;
+use App\Models\Schedules; // Import the Schedules model
 
 class Collaborations extends Model
 {
@@ -41,8 +42,17 @@ class Collaborations extends Model
         return $this->belongsTo(Projects::class);
     }
 
+    /**
+     * Get the appointment associated with the collaboration.
+     */
     public function appointment()
     {
         return $this->hasOne(Schedules::class, 'collaboration_id');
+    }
+
+    // Add this relationship to access the project's schedules through the collaboration
+    public function projectSchedules()
+    {
+        return $this->hasMany(Schedules::class, 'collaboration_id', 'id');
     }
 }

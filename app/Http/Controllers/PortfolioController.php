@@ -18,32 +18,38 @@ class PortfolioController extends Controller
         return view('portfolios.index', compact('portfolios'));
     }
 
-    public function show(User $user)
+    public function show(string $id)
     {
 
-        // Get the authenticated user
-        $user = Auth::user();
+    // Find the user by ID
+    $user = User::findOrFail($id);
 
-        // Check if the user is a DESIGNER
-        if ($user->role !== 'DESIGNER') {
-            abort(403, 'Unauthorized action.');
-        }
+    // Log the user ID to see which user is being queried
+    logger()->info('User ID: ' . $user->id);
+    // dd($user->portfolio);
+    // Get the portfolio of the DESIGNER
+    $portfolio = $user->portfolio;
     
-        // Get the portfolio of the DESIGNER
-        $portfolio = $user->portfolio;
+    // Log the portfolio data
+    logger()->info('Portfolio Data: ' . json_encode($portfolio));
     
-        // Check if the portfolio exists
+
+    // Check if the portfolio exists
         if ($portfolio) {
             // Load the items associated with the portfolio
             $portfolio->load('items');
-    
+
+            // Log the portfolio items
+            logger()->info('Portfolio Items: ' . json_encode($portfolio->items));
+
             // Pass the portfolio data to the view
             return view('portfolios.show', compact('portfolio'));
         } else {
             abort(404, 'Portfolio not found.');
         }
-    }
     
+    }
+
 
 
 
@@ -114,6 +120,22 @@ class PortfolioController extends Controller
 
         return view('designers.profile', compact('designer', 'portfolio'));
     }
+
+        // Add the deleteItem method to your PortfolioController
+    public function deleteItem(PortfolioItem $item)
+    {
+        // Check if the authenticated user owns the portfolio item
+        if ($item->portfolio->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Delete the portfolio item
+        $item->delete();
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Portfolio item deleted successfully!');
+    }
+
 
 
 

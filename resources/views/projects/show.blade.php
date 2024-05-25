@@ -11,7 +11,10 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <!-- Project Title and Description -->
                     <h1 class="text-2xl font-semibold mb-4">{{ $project->title }}</h1>
+                    
+
                     <p class="text-gray-700 mb-6">{!! nl2br(e($project->description)) !!}</p>
+                    <p class="text-gray-700 mb-6">Budget : RM{!! nl2br(e($project->budget)) !!}</p>
                     <div class="mb-6">
                         <span class="font-semibold">Created by:</span> {{ $project->user->email }}
                     </div>
@@ -26,6 +29,8 @@
                             @endforeach
                         </div>
                     @endif
+
+                    <div class="py-12">
 
                     <!-- Designer: Send Collaboration Request -->
                     @if(Auth::user()->role === 'DESIGNER' && !$hasSentRequest)
@@ -44,13 +49,24 @@
 
                     <!-- Client: View & Respond to Collaboration Requests -->
                     @if(Auth::user()->id === $project->user_id)
-                        <button id="toggleCollabRequests" class="mt-4 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded cursor-pointer">
+                        <button id="toggleCollabRequests" class="mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded cursor-pointer">
                             View Collaboration Requests
                         </button>
 
                         @if(Auth::user()->role === 'CLIENT' && Auth::id() === $project->user_id)
                         <a href="{{ route('projects.edit', $project) }}" class="bg-blue-500 text-white px-4 py-2.5 rounded hover:bg-blue-600">Edit</a>
                         @endif
+
+                       
+                        
+                        @if(Auth::user()->role === 'CLIENT' && Auth::id() === $project->user_id && $project->status === 'Finished')
+                            <a href="{{ route('reviews.create', $project->id) }}" class="bg-green-500 text-white px-4 py-2.5 rounded hover:bg-green-600">Add Review</a>
+
+                        @endif
+
+
+
+                           
                         <div id="collabRequestsSection" class="hidden">
                             <h2 class="mt-4 text-lg font-semibold">Collaboration Requests</h2>
                             @forelse ($collaborationRequests as $request)

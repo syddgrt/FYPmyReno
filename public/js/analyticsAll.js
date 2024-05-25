@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const analyticsChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Cost Estimation', 'Actual Cost', 'Tax', 'Additional Fees'],
+            labels: ['Proposed Cost', 'Estimation Cost', 'Tax', 'Additional Fees'],
             datasets: [{
                 label: 'Financial Data',
                 data: [totalCostEstimation, totalActualCost, totalTax, totalAdditionalFees],

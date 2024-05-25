@@ -16,40 +16,39 @@
                         @csrf
                         @method('PUT')
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                            <!-- Project Title
-                            <div>
-                                <label for="project_title" class="block text-sm font-medium text-black-700">Project Title</label>
-                                <select id="project_title" name="project_id" class="mt-1 block w-full text-black ...">
-                                    @foreach ($projects as $projectId => $projectTitle)
-                                        <option value="{{ $projectId }}" @if ($finance->project_id == $projectId) selected @endif>{{ $projectTitle }}</option>
-                                    @endforeach
-                                </select>
-                            </div> -->
-
-
                             <!-- Cost Estimation -->
                             <div>
-                                <label for="cost_estimation" class="block text-sm font-medium text-gray-700">Cost Estimation</label>
+                                {{ $projects->title }}
+                            </div>
+                            <div>
+                                
+                            </div>
+
+                            <div>
+                                <label for="cost_estimation" class="block text-sm font-medium text-gray-700">Proposed Cost (RM)</label>
                                 <input type="number" name="cost_estimation" id="cost_estimation" value="{{ $finance->cost_estimation }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
 
-                            <!-- Actual Cost -->
-                            <div>
-                                <label for="actual_cost" class="block text-sm font-medium text-gray-700">Actual Cost</label>
-                                <input type="number" name="actual_cost" id="actual_cost" value="{{ $finance->actual_cost }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                            </div>
+                            <!-- Only allow designers to edit these fields -->
+                            @if (Auth::user()->role === 'DESIGNER')
+                                <!-- Actual Cost -->
+                                <div>
+                                    <label for="actual_cost" class="block text-sm font-medium text-gray-700">Estimation Cost (RM)</label>
+                                    <input type="number" name="actual_cost" id="actual_cost" value="{{ $finance->actual_cost }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                </div>
 
-                            <!-- Tax -->
-                            <div>
-                                <label for="tax" class="block text-sm font-medium text-gray-700">Tax</label>
-                                <input type="number" name="tax" id="tax" value="{{ $finance->tax }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                            </div>
+                                <!-- Tax -->
+                                <div>
+                                    <label for="tax" class="block text-sm font-medium text-gray-700">Tax (RM)</label>
+                                    <input type="number" name="tax" id="tax" value="{{ $finance->tax }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                </div>
 
-                            <!-- Additional Fees -->
-                            <div>
-                                <label for="additional_fees" class="block text-sm font-medium text-gray-700">Additional Fees</label>
-                                <input type="number" name="additional_fees" id="additional_fees" value="{{ $finance->additional_fees }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                            </div>
+                                <!-- Additional Fees -->
+                                <div>
+                                    <label for="additional_fees" class="block text-sm font-medium text-gray-700">Additional Fees (RM)</label>
+                                    <input type="number" name="additional_fees" id="additional_fees" value="{{ $finance->additional_fees }}" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                </div>
+                            @endif
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

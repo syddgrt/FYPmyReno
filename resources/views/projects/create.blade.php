@@ -1,5 +1,3 @@
-<!-- create.blade.php -->
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -26,6 +24,14 @@
                             <label for="description" class="block text-gray-700 text-sm font-bold mb-2">{{ __('Description') }}</label>
                             <textarea id="description" class="form-textarea rounded-md shadow-sm mt-1 block w-full @error('description') is-invalid @enderror" name="description" required>{{ old('description') }}</textarea>
                             @error('description')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="budget" class="block text-gray-700 text-sm font-bold mb-2">{{ __('Budget') }} (RM)</label>
+                            <input id="budget" type="number" class="form-input rounded-md shadow-sm mt-1 block w-full @error('budget') is-invalid @enderror" name="budget" value="{{ old('budget') }}" required >
+                            @error('budget')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>

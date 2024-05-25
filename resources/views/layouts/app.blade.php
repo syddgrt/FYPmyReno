@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -14,6 +15,9 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        
+
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -31,7 +35,18 @@
             <!-- Page Content -->
             <main>
                 {{ $slot }}
+
             </main>
+
+
         </div>
     </body>
+
+    <footer class="bg-white dark:bg-gray-800 shadow">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 text-center text-gray-500 dark:text-gray-400">
+                    &copy; {{ date('Y') }} MyReno. All rights reserved.
+                </div>
+            </footer>
+                
 </html>
+<!-- Footer -->

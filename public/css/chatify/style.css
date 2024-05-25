@@ -20,16 +20,21 @@ body {
   --listView-header-height: 110px;
 
   /* Light theme variables */
-  --primary-bg-color: #fff;
-  --secondary-bg-color: #f7f7f7;
-  --border-color: #eee;
-  --messagingView-bg-color: #f6f7f9;
-  --scrollbar-thumb-color: #cfcfcf;
-  --modal-bg-color: #fff;
-  --send-input-icons-color: #4b4b4b;
-  --message-hint-bg-color: #ededed;
-  --message-hint-color: #4b4b4b;
-  --message-card-color: #fff;
+  --primary-bg-color: #c2ccff; /* Keep primary background white for light mode */
+  --secondary-bg-color: #f0f4f8; /* Light grayish-blue for a modern look */
+  --border-color: #d0d7de; /* Slightly darker border color for better contrast */
+  --messagingView-bg-color: #f2f5fa; /* Very light blueish-gray for the messaging view */
+  --scrollbar-thumb-color: #b0b7c3; /* Medium gray for the scrollbar */
+  --modal-bg-color: #a2d2ff; /* Keep modal background white */
+  --send-input-icons-color: #4a5568; /* Dark gray for input icons for good readability */
+  --message-hint-bg-color: #5da3ff; /* Light grayish-blue for message hint background */
+  --message-hint-color: #2d3748; /* Dark gray for message hint text */
+  --message-card-color: #c0bfff; /* Keep message card color white */
+
+  /* Text and contrast settings */
+  --messages-text-bg-color: #2d3748; /* Dark gray background for the "MESSAGES" text area */
+  --messages-text-color: #ffffff; /* White color for text to ensure good contrast */
+
 
   /* Dark theme variables */
   --dark-primary-bg-color: #121212;
@@ -98,6 +103,7 @@ body {
 }
 .messenger-headTitle {
   margin: 0rem 0.7rem;
+  color: #ffffff;
 }
 .messenger {
   display: inline-flex;

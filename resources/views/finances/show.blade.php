@@ -22,8 +22,8 @@
                             <table class="table-auto border-collapse border border-gray-800 w-full">
                                 <thead>
                                     <tr class="bg-gray-200">
-                                        <th class="border border-gray-600 px-4 py-2">Cost Estimation</th>
-                                        <th class="border border-gray-600 px-4 py-2">Actual Cost</th>
+                                        <th class="border border-gray-600 px-4 py-2">Proposed Cost</th>
+                                        <th class="border border-gray-600 px-4 py-2">Estimation Cost</th>
                                         <th class="border border-gray-600 px-4 py-2">Tax</th>
                                         <th class="border border-gray-600 px-4 py-2">Additional Fees</th>
                                     </tr>

@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Cost Estimation', 'Actual Cost', 'Tax', 'Additional Fees'],
+            labels: ['Proposed Cost', 'Actual Cost', 'Tax', 'Additional Fees'],
             datasets: [{
-                label: 'Cost Estimation', 
+                label: 'Proposed Cost', 
                 data: [costEstimation, actualCost, tax, additionalFees],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',

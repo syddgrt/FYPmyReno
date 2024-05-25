@@ -82,24 +82,27 @@ class CollaborationsController extends Controller
     }
 
         public function index()
-    {
-        $userId = Auth::id();
-        if (Auth::user()->role === 'DESIGNER') {
-            // Fetch collaborations where the authenticated user is the designer
-            $collaborationRequests = Collaborations::where('designer_id', $userId)
-                                                    ->with(['project', 'client']) // Assuming you have these relationships
-                                                    ->get();
-        } else {
-            // Fetch collaborations related to the client's projects
-            $collaborationRequests = Collaborations::whereHas('project', function ($query) use ($userId) {
-                                                        $query->where('user_id', $userId);
-                                                    })
-                                                    ->with(['project', 'designer'])
-                                                    ->get();
-        }
+        {
+            $userId = Auth::id();
+            $user = Auth::user();
+            $userRole = $user->role;
 
-        return view('collaborations.index', compact('collaborationRequests'));
-    }
+            if (Auth::user()->role === 'DESIGNER') {
+                // Fetch collaborations where the authenticated user is the designer
+                $collaborationRequests = Collaborations::where('designer_id', $userId)
+                                                        ->with(['project', 'client']) // Assuming you have these relationships
+                                                        ->get();
+            } else {
+                // Fetch collaborations related to the client's projects
+                $collaborationRequests = Collaborations::whereHas('project', function ($query) use ($userId) {
+                                                            $query->where('user_id', $userId);
+                                                        })
+                                                        ->with(['project', 'designer'])
+                                                        ->get();
+            }
+
+            return view('collaborations.index', compact('collaborationRequests', 'userRole'));
+        }
 
     
 
