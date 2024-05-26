@@ -7,6 +7,13 @@ use App\Models\FinancialData;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Projects; // Correct reference if your model is named Project
 use App\Models\Collaborations;
+use Spatie\LaravelPdf\Facades\Pdf;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Spatie\Browsershot\Browsershot;
+
+
+
 
 class FinancesController extends Controller
 {
@@ -149,6 +156,68 @@ class FinancesController extends Controller
         return view('finances.show', compact('finance', 'project'));
     }
 
+    public function downloadPdf($projectId)
+    {
+        return $this->generatePdf($projectId);
+    }
+
+    public function generatePdf($projectId)
+{
+    Log::info('generatePdf called with projectId: ' . $projectId);
+
+    try {
+        // Retrieve financial data for the project
+        $finance = FinancialData::where('project_id', $projectId)->firstOrFail();
+        Log::info('Financial data retrieved: ' . json_encode($finance));
+
+        // Retrieve project details
+        $project = Projects::findOrFail($projectId);
+        Log::info('Project details retrieved: ' . json_encode($project));
+
+        // Pass the fetched data to the Blade view
+        $data = [
+            'finance' => $finance,
+            'project' => $project,
+        ];
+        Log::info('Data prepared for PDF: ' . json_encode($data));
+
+        // Define the directory and file name for the PDF
+        $directory = public_path('pdfs');
+        $filePath = $directory . '/finance.pdf';
+        Log::info('PDF will be saved to: ' . $filePath);
+
+        // Ensure the directory exists
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+            Log::info('Directory created: ' . $directory);
+        } else {
+            Log::info('Directory already exists: ' . $directory);
+        }
+
+        // Set the path to the Node.js executable
+        $nodeBinary = 'C:\Program Files\nodejs\node.exe'; // Modify this path if necessary
+
+        // Generate PDF using Browsershot with the specified Node.js binary path
+        Log::info('Starting PDF generation...');
+        Browsershot::html('<h1>Hello world</h1>')
+            ->setNodeBinary($nodeBinary)
+            ->save($filePath);
+        Log::info('PDF generated successfully at: ' . $filePath);
+
+        // Return a response to download the generated PDF file
+        Log::info('Preparing response for file download...');
+        return response()->download($filePath);
+
+    } catch (\Exception $e) {
+        Log::error('PDF generation failed: ' . $e->getMessage());
+        return back()->with('error', 'PDF generation failed: ' . $e->getMessage());
+    }
+}
+
+    
+
+
+
     public function destroy($id)
     {
         $finance = FinancialData::findOrFail($id);
@@ -156,7 +225,7 @@ class FinancesController extends Controller
 
         return redirect()->route('finances.index')->with('success', 'Financial data deleted successfully.');
     }
-
+        
 
 
 

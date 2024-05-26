@@ -88,6 +88,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('finances', FinancesController::class);
     Route::get('/finances', [FinancesController::class, 'index'])->name('finances.index');
     Route::get('/finances/create', [FinancesController::class, 'create'])->name('finances.create');
+
+    // This route handles the POST request to generate and download the PDF
+    Route::post('/finances/download-pdf/{projectId}', [FinancesController::class, 'downloadPdf'])->name('finances.downloadPdf');
+
+    // If you need a separate route for generating the PDF that can handle both GET and POST requests, you can keep this route
+    Route::match(['get', 'post'], '/generate-pdf', [FinancesController::class, 'generatePdf'])->name('finances.generatePdf');
+
+
+
     // Route::get('/finances/{projectId}', [FinancesController::class, 'show'])->name('finances.show');
     // Route::get('/finances/{id}/edit', [FinancesController::class, 'edit'])->name('finances.edit');
     // Route::put('/finances/{id}', [FinancesController::class, 'update'])->name('finances.update');

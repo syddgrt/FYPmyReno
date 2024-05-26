@@ -52,6 +52,20 @@
         </div>
     </div>
 
+
+    <!-- "Generate PDF" button -->
+    <div class="flex justify-end mt-4">
+    <form action="{{ route('finances.downloadPdf', ['projectId' => $project->id]) }}" method="POST">
+        @csrf
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Generate PDF
+        </button>
+    </form>
+</div>
+
+
+
+
     <script>
         // Pass financial data to JavaScript file
         const costEstimation = {{ $finance->cost_estimation }};
