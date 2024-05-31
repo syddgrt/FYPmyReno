@@ -25,7 +25,7 @@
                         <div class="mb-4">
                             <label for="status" class="block text-gray-700 text-sm font-bold mb-2">Status:</label>
                             <select name="status" id="status" class="form-select rounded-md shadow-sm mt-1 block w-full">
-                                <option value="Pending" {{ $project->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="Pending" {{ $project->status == 'Open' ? 'selected' : '' }}>Open</option>
                                 <option value="In View" {{ $project->status == 'In View' ? 'selected' : '' }}>In View</option>
                                 <option value="Finished" {{ $project->status == 'Finished' ? 'selected' : '' }}>Finished</option>
                             </select>

@@ -22,10 +22,10 @@
                     <form method="POST" action="{{ route('schedules.store') }}">
                         @csrf
 
-                        <div class="mb-4">
+                        <!-- <div class="mb-4">
                             <label for="collaboration_id" class="block text-gray-700 text-sm font-bold mb-2">Project Title: {{ request()->input('title') }}</label>
                             <input type="hidden" name="collaboration_id" value="{{ request()->input('collaboration_id') }}">
-                        </div>
+                        </div> -->
 
                         <div class="mb-4">
                             <label for="collaboration_id" class="block text-gray-700 text-sm font-bold mb-2">Collaboration ID: {{ request()->input('collaboration_id') }}</label>

@@ -78,7 +78,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route::get('/conversations/{recipientId?}', [MessageController::class, 'showConversations'])->name('conversations.index');
     // Route::post('/conversations/start/{recipientId}', [MessageController::class, 'startConversation'])->name('conversations.start');
-    // Route::post('/collaborations', [CollaborationsController::class, 'store'])->name('collaborations.store');
+    Route::post('/collaborations', [CollaborationsController::class, 'store'])->name('collaborations.store');
     // Route::get('/collaborations/{id}/edit', [CollaborationsController::class, 'edit'])->name('collaborations.edit');
     // Route::put('/collaborations/destroy}', [CollaborationsController::class, 'destroy'])->name('collaborations.destroy');
 

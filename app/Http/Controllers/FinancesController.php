@@ -64,38 +64,38 @@ class FinancesController extends Controller
 
 
     public function update(Request $request, $id)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    // Base validation rules
-    $rules = [
-        'cost_estimation' => 'required|numeric',
-    ];
+        // Base validation rules
+        $rules = [
+            'cost_estimation' => 'required|numeric',
+        ];
 
-    // Additional rules for designers
-    if ($user->role === 'DESIGNER') {
-        $rules['actual_cost'] = 'required|numeric';
-        $rules['tax'] = 'required|numeric';
-        $rules['additional_fees'] = 'required|numeric';
+        // Additional rules for designers
+        if ($user->role === 'DESIGNER') {
+            $rules['actual_cost'] = 'required|numeric';
+            $rules['tax'] = 'required|numeric';
+            $rules['additional_fees'] = 'required|numeric';
+        }
+
+        $request->validate($rules);
+
+        $financialData = FinancialData::findOrFail($id);
+
+        // Update only cost_estimation for clients
+        if ($user->role === 'CLIENT') {
+            $financialData->update([
+                'cost_estimation' => $request->input('cost_estimation'),
+            ]);
+        } else {
+            // Update all fields for designers
+            $financialData->update($request->all());
+        }
+
+        // Redirect to the finances index page with a success message
+        return redirect()->route('finances.index')->with('success', 'Financial data updated successfully!');
     }
-
-    $request->validate($rules);
-
-    $financialData = FinancialData::findOrFail($id);
-
-    // Update only cost_estimation for clients
-    if ($user->role === 'CLIENT') {
-        $financialData->update([
-            'cost_estimation' => $request->input('cost_estimation'),
-        ]);
-    } else {
-        // Update all fields for designers
-        $financialData->update($request->all());
-    }
-
-    // Redirect to the finances index page with a success message
-    return redirect()->route('finances.index')->with('success', 'Financial data updated successfully!');
-}
 
 
     public function create()
@@ -137,6 +137,8 @@ class FinancesController extends Controller
 
         return redirect()->route('finances.index')->with('success', 'Financial data added successfully.');
     }
+
+    
     public function show($projectId)
     {
         // Retrieve financial data for the project

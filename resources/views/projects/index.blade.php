@@ -36,7 +36,7 @@
                                 <p class="text-gray-600 mb-2">
                                     Status:
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        @if ($project->status === 'Pending') bg-red-300 text-red-800 @elseif ($project->status === 'In View') bg-yellow-300 text-yellow-800 @elseif ($project->status === 'Finished') bg-green-300 text-green-800 @endif">
+                                        @if ($project->status === 'open') bg-red-300 text-red-800 @elseif ($project->status === 'In View') bg-yellow-300 text-yellow-800 @elseif ($project->status === 'Finished') bg-green-300 text-green-800 @endif">
                                         {{ $project->status }}
                                     </span>
                                 </p>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Closure;
-use App\Http\Controllers\Controller; // Import the base controller class
+use App\Http\Controllers\Controller; 
 use App\Models\Projects;
 use App\Models\ProjectAttachment;
 use App\Models\User;
@@ -19,7 +19,7 @@ class ProjectsController extends Controller
     /**
      * Display a listing of the resource.
      */
-     public function index(Request $request)
+    public function index(Request $request)
     {
         $user = Auth::user();
         $search = $request->input('search');
@@ -97,10 +97,6 @@ class ProjectsController extends Controller
          return redirect()->route('projects.index')->with('success', 'Project created successfully!');
      }
      
-
-
-
-
     /**
      * Display the specified resource.
      */
@@ -122,8 +118,6 @@ class ProjectsController extends Controller
 
         return view('projects.show', compact('project', 'images', 'collaborationRequests'));
     }
-
-
     
     /**
      * Update the specified resource in storage.

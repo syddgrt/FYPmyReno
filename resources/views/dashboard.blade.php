@@ -1,3 +1,21 @@
+<head><style>
+        .status {
+            margin-top: 3px;
+            padding: 2px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 9999px; /* full rounded */
+            display: inline-flex;
+            align-items: center;
+        }
+        .bg-red-300 { background-color: #fc8181; }
+        .text-red-800 { color: #742a2a; }
+        .bg-yellow-300 { background-color: #faf089; }
+        .text-yellow-800 { color: #7b341e; }
+        .bg-green-300 { background-color: #9ae6b4; }
+        .text-green-800 { color: #22543d; }
+    </style></head>
+
 <title>Dashboard</title>
 <x-app-layout>
     <x-slot name="header">
@@ -82,7 +100,13 @@
                                 @foreach($activeCollaborations as $project)
                                     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
                                         <p><strong>Project:</strong> {{ $project->title }}</p>
-                                        <p><strong>Status:</strong> {{ $project->status }}</p>
+                                        <span class="status
+                                            @if ($project->status === 'Pending') bg-red-300 text-red-800 
+                                            @elseif ($project->status === 'In View') bg-yellow-300 text-yellow-800 
+                                            @elseif ($project->status === 'Finished') bg-green-300 text-green-800 
+                                            @endif">
+                                            {{ $project->status }}
+                                        </span>
                                         @if($project->financialData)
                                             <p><strong>Cost Estimation: RM</strong> {{$project->financialData->actual_cost }}</p>
                                         @endif
@@ -128,7 +152,13 @@
                                 @foreach($activeCollaborations as $collaboration)
                                     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
                                         <p><strong>Project:</strong> {{ $collaboration->project->title }}</p>
-                                        <p><strong>Status:</strong> {{ $collaboration->status }}</p>
+                                        <span class="status
+                                            @if ($collaboration->project->status === 'Pending') bg-red-300 text-red-800 
+                                            @elseif ($collaboration->project->status === 'In View') bg-yellow-300 text-yellow-800 
+                                            @elseif ($collaboration->project->status === 'Finished') bg-green-300 text-green-800 
+                                            @endif">
+                                            {{ $collaboration->project->status }}
+                                        </span>
                                         @if($collaboration->project->financialData)
                                             <p><strong>Cost Estimation: RM</strong> {{$collaboration->project->financialData->actual_cost }}</p>
                                         @endif
