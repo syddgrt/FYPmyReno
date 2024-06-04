@@ -129,7 +129,7 @@
                 const myChart_{{ $loop->index }} = new Chart(ctx_{{ $loop->index }}, {
                     type: 'bar',
                     data: {
-                        labels: ['Proposed Cost', 'Actual Cost', 'Tax', 'Additional Fees'],
+                        labels: ['Proposed Cost', 'Estimation Cost', 'Tax', 'Additional Fees'],
                         datasets: [{
                             label: 'Financial Data',
                             data: [{{ $data->cost_estimation }}, {{ $data->actual_cost }}, {{ $data->tax }}, {{ $data->additional_fees }}],

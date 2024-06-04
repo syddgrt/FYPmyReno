@@ -12,6 +12,8 @@ use App\Http\Controllers\SchedulesController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\ReviewsController;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\PDFController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +94,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('/finances/{id}/edit', [FinancesController::class, 'edit'])->name('finances.edit');
     // Route::put('/finances/{id}', [FinancesController::class, 'update'])->name('finances.update');
     Route::post('/finances', [FinancesController::class, 'store'])->name('finances.store');
+    Route::get('/generate-pdf/{projectId}', [PDFController::class, 'generatePDF'])->name('generate.pdf');
+
     // Route::delete('/finances/{id}', [FinancesController::class, 'destroy'])->name('finances.destroy');
 
 
@@ -138,5 +142,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/admin/users/{id}', [AdminController::class, 'destroyUsers'])->name('admin.users.destroy');
 
 });
+
+// Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 require __DIR__.'/auth.php';

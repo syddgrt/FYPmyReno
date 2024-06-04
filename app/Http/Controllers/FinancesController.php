@@ -146,9 +146,10 @@ class FinancesController extends Controller
 
         // Retrieve project details
         $project = Projects::findOrFail($projectId);
+        $totalCost = $finance->actual_cost + $finance->tax + $finance->additional_fees;
 
         // Pass the data to the view
-        return view('finances.show', compact('finance', 'project'));
+        return view('finances.show', compact('finance', 'project', 'totalCost'));
     }
 
     public function destroy($id)
