@@ -57,6 +57,13 @@ return [
             'throw' => false,
         ],
 
+        'designerproofs' => [
+            'driver' => 'local',
+            'root' => public_path('storage/designerproofs'),
+            'url' => env('APP_URL').'/storage/designerproofs',
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*

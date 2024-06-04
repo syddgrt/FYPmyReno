@@ -139,4 +139,17 @@ class User extends Authenticatable
         return $this->hasMany(Reviews::class, 'client_id');
     }
 
+    // app/Models/User.php
+
+    public function designerProof()
+    {
+        return $this->hasOne(DesignerProof::class);
+    }
+
+    public function clientPayment()
+    {
+        return $this->hasOne(ClientPayment::class);
+    }
+
+
 }

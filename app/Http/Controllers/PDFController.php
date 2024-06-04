@@ -4,19 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use PDF;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use App\Models\FinancialData;
 use App\Models\Projects;
 use App\Models\User;
 use App\Models\Collaborations;
-use Illuminate\Support\Facades\Log;
 
 class PDFController extends Controller
 {
     public function generatePDF(Request $request, $projectId)
     {
-
         // Retrieve chart images from the request
         $analyticsChart = $request->input('analyticsChart');
         $pieChart = $request->input('pieChart');
@@ -30,13 +26,19 @@ class PDFController extends Controller
         // Retrieve client and designer names
         $clientName = User::findOrFail($project->user_id)->name;
 
-        // // Fetch the designer ID from the collaboration table
+        // Fetch the designer ID from the collaboration table
         $collaboration = Collaborations::where('project_id', $projectId)->firstOrFail();
         $designerId = $collaboration->designer_id;
         $designerName = User::findOrFail($designerId)->name;
 
         // Calculate total cost
         $totalCost = $finance->actual_cost + $finance->tax + $finance->additional_fees;
+
+        // Convert image to base64
+        $path = public_path('image/MyRenoLogo.png');
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
         // Pass the data to the PDF view
         $data = [
@@ -45,6 +47,7 @@ class PDFController extends Controller
             'totalCost' => $totalCost,
             'clientName' => $clientName,
             'designerName' => $designerName,
+            'base64' => $base64
         ];
 
         // Load the PDF view and generate the PDF
