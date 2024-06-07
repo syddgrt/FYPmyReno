@@ -81,28 +81,43 @@ class CollaborationsController extends Controller
         return redirect()->back()->with('success', 'Collaboration request updated successfully!');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $userId = Auth::id();
         $user = Auth::user();
         $userRole = $user->role;
 
+        $clientName = $request->input('client_name');
+
         if (Auth::user()->role === 'DESIGNER') {
-            // Fetch collaborations where the authenticated user is the designer
-            $collaborationRequests = Collaborations::where('designer_id', $userId)
-                                                    ->with(['project', 'client']) // Assuming you have these relationships
-                                                    ->get();
+            $query = Collaborations::where('designer_id', $userId)
+                ->with(['project', 'client']);
+            
+            if ($clientName) {
+                $query->whereHas('client', function ($q) use ($clientName) {
+                    $q->where('name', 'like', '%' . $clientName . '%');
+                });
+            }
+
+            $collaborationRequests = $query->get();
         } else {
-            // Fetch collaborations related to the client's projects
-            $collaborationRequests = Collaborations::whereHas('project', function ($query) use ($userId) {
-                                                        $query->where('user_id', $userId);
-                                                    })
-                                                    ->with(['project', 'designer'])
-                                                    ->get();
+            $query = Collaborations::whereHas('project', function ($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                })
+                ->with(['project', 'designer']);
+            
+            if ($clientName) {
+                $query->whereHas('client', function ($q) use ($clientName) {
+                    $q->where('name', 'like', '%' . $clientName . '%');
+                });
+            }
+
+            $collaborationRequests = $query->get();
         }
 
         return view('collaborations.index', compact('collaborationRequests', 'userRole'));
     }
+
 
     
 

@@ -7,29 +7,51 @@ use App\Models\FinancialData;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Projects; // Correct reference if your model is named Project
 use App\Models\Collaborations;
+use App\Models\User; // Correct reference if your model is named Project
 
 class FinancesController extends Controller
 {
-    public function index()
-    {
-        $userId = Auth::id(); // Get the logged-in user's ID
-        $financialDatas = FinancialData::whereHas('project', function ($query) use ($userId) {
-            $query->where(function ($q) use ($userId) {
-                $q->where('user_id', $userId) // Filter by projects created by the current user
-                ->orWhereHas('collaborations', function ($query) use ($userId) {
-                    $query->where('designer_id', $userId)->where('status', 'accepted'); // Filter by projects the current user is collaborating on
-                });
-            });
-        })->get();
+    public function index(Request $request)
+{
+    $userId = Auth::id(); // Get the logged-in user's ID
 
-        // Calculate sums of financial data
-        $totalCostEstimation = $financialDatas->sum('cost_estimation');
-        $totalActualCost = $financialDatas->sum('actual_cost');
-        $totalTax = $financialDatas->sum('tax');
-        $totalAdditionalFees = $financialDatas->sum('additional_fees');
-        
-        return view('finances.index', compact('financialDatas', 'totalCostEstimation', 'totalActualCost', 'totalTax', 'totalAdditionalFees'));
-    }
+    // Get the client_id from the request if it exists
+    $clientId = $request->query('client_id');
+
+    // Retrieve financial data filtered by projects the designer is collaborating on or created
+    $financialDatas = FinancialData::whereHas('project', function ($query) use ($userId, $clientId) {
+        $query->where(function ($q) use ($userId, $clientId) {
+            $q->where('user_id', $userId); // Filter by projects created by the current user
+            if ($clientId) {
+                $q->where('user_id', $clientId); // Filter by selected client
+            }
+            $q->orWhereHas('collaborations', function ($query) use ($userId, $clientId) {
+                $query->where('designer_id', $userId)->where('status', 'accepted'); // Filter by projects the current user is collaborating on
+                if ($clientId) {
+                    $query->whereHas('project', function ($q) use ($clientId) {
+                        $q->where('user_id', $clientId); // Filter by selected client
+                    });
+                }
+            });
+        });
+    })->get();
+
+    // Calculate sums of financial data
+    $totalCostEstimation = $financialDatas->sum('cost_estimation');
+    $totalActualCost = $financialDatas->sum('actual_cost');
+    $totalTax = $financialDatas->sum('tax');
+    $totalAdditionalFees = $financialDatas->sum('additional_fees');
+
+    // Get the list of clients the designer is collaborating with
+    $clients = User::whereHas('projects', function ($query) use ($userId) {
+        $query->whereHas('collaborations', function ($query) use ($userId) {
+            $query->where('designer_id', $userId)->where('status', 'accepted');
+        });
+    })->get();
+
+    return view('finances.index', compact('financialDatas', 'totalCostEstimation', 'totalActualCost', 'totalTax', 'totalAdditionalFees', 'clients', 'clientId'));
+}
+
 
 
 
@@ -98,26 +120,41 @@ class FinancesController extends Controller
     }
 
 
-    public function create()
-    {
-        $userId = Auth::id(); // Get the logged-in user's ID
-        $role = Auth::user()->role; // Get the role of the logged-in user
+    public function create(Request $request)
+{
+    $userId = Auth::id(); // Get the logged-in user's ID
+    $role = Auth::user()->role; // Get the role of the logged-in user
 
-        // Query to fetch projects where the designer has collaborations
-        $projectsQuery = Projects::whereHas('collaborations', function ($query) use ($userId) {
+    // Get the list of clients the designer is collaborating with
+    $clients = User::whereHas('projects', function ($query) use ($userId) {
+        $query->whereHas('collaborations', function ($query) use ($userId) {
             $query->where('designer_id', $userId)->where('status', 'accepted');
         });
+    })->get();
 
-        // Filter projects based on user role and existing financial data
-        $projects = $projectsQuery->whereNotExists(function ($query) use ($userId) {
-            $query->select('id')
-                ->from('financial_datas')
-                ->whereRaw('financial_datas.project_id = projects.id')
-                ->where('user_id', $userId);
-        })->pluck('title', 'id');
+    $clientId = $request->query('client_id');
 
-        return view('finances.create', compact('projects'));
+    // Query to fetch projects where the designer has collaborations and based on selected client
+    $projectsQuery = Projects::whereHas('collaborations', function ($query) use ($userId) {
+        $query->where('designer_id', $userId)->where('status', 'accepted');
+    });
+
+    // Filter projects based on selected client
+    if ($clientId) {
+        $projectsQuery->where('user_id', $clientId);
     }
+
+    // Filter projects based on existing financial data
+    $projects = $projectsQuery->whereNotExists(function ($query) use ($userId) {
+        $query->select('id')
+            ->from('financial_datas')
+            ->whereRaw('financial_datas.project_id = projects.id')
+            ->where('user_id', $userId);
+    })->pluck('title', 'id');
+
+    return view('finances.create', compact('projects', 'clients', 'clientId'));
+}
+
 
 
 

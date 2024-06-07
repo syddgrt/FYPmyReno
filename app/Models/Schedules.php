@@ -13,6 +13,7 @@ class Schedules extends Model
         'collaboration_id',
         'date',
         'time',
+        'place',
     ];
 
     public function collaboration()

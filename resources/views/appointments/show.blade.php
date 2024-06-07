@@ -14,6 +14,7 @@
                     <h1 class="text-2xl font-semibold mb-4">Appointment Information</h1>
                     <p>Date: {{ $appointment->date }}</p>
                     <p>Time: {{ $appointment->time }}</p>
+                    <p>Place: {{ $appointment->place }}</p>
                     <!-- Add more appointment details here as needed -->
                 </div>
             </div>

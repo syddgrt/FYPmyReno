@@ -140,7 +140,12 @@ class ProjectsController extends Controller
             }
         }
 
-        return view('projects.edit', compact('project'));
+        // Check if there are any active collaborations for this project
+        $hasActiveCollaboration = $project->collaborations()
+                                         ->where('status', 'accepted')
+                                         ->exists();
+
+        return view('projects.edit', compact('project', 'hasActiveCollaboration'));
     }
 
     // ProjectsController.php
@@ -176,6 +181,11 @@ class ProjectsController extends Controller
 
         return redirect()->route('projects.index')->with('success', 'Project deleted successfully!');
     }
+
+
+    
+
+
     
 }
 

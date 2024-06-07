@@ -52,7 +52,7 @@
           </a>
         </div>
         <ul class="nav">
-          <li class="active ">
+          <li>
             <a href="dashboard">
               <i class="tim-icons icon-chart-pie-36"></i>
               <p>Dashboard</p>
@@ -76,8 +76,8 @@
               <p>Finances</p>
             </a>
           </li>
-          <li>
-            <a href="messages">
+          <li class="active ">
+            <a href="{{ url('messenger') }}">
               <i class="tim-icons icon-bell-55"></i>
               <p>Messages</p>
             </a>
@@ -153,135 +153,100 @@
       </div>
       <!-- End Navbar -->
       <div class="content">
-        <div class="row">
-          <div class="col-12">
-            <div class="card card-chart">
-              <div class="card-header ">
-                <div class="row">
-                  <div class="col-sm-6 text-left">
-                    <h5 class="card-category">Number of Projects</h5>
-                    <h2 class="card-title"></h2>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                      <label class="btn btn-sm btn-primary btn-simple active" id="0">
-                        <input type="radio" name="options" checked>
-                        <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Client Projects</span>
-                        <span class="d-block d-sm-none">
-                          <i class="tim-icons icon-single-02"></i>
-                        </span>
-                      </label>
-                      <label class="btn btn-sm btn-primary btn-simple" id="2">
-                        <input type="radio" class="d-none" name="options">
-                        <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Sessions</span>
-                        <span class="d-block d-sm-none">
-                          <i class="tim-icons icon-tap-02"></i>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="chart-area">
-                  <canvas id="chartBig1"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-category">Total Shipments</h5>
-                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i></h3>
-              </div>
-              <div class="card-body">
-                <div class="chart-area">
-                  <canvas id="chartLinePurple"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-category">Daily Sales</h5>
-                <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> 3,500€</h3>
-              </div>
-              <div class="card-body">
-                <div class="chart-area">
-                  <canvas id="CountryChart"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-category">Completed Tasks</h5>
-                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 12,100K</h3>
-              </div>
-              <div class="card-body">
-                <div class="chart-area">
-                  <canvas id="chartLineGreen"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">          
-          <div class="col-lg-12 col-md-12">
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-title"> List of Projects</h4>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table tablesorter " id="">
-                    <thead class=" text-primary">
-                      <tr>
-                        <th>
-                          Project ID
-                        </th>
-                        <th>
-                          User ID
-                        </th>
-                        <th>
-                          Title
-                        </th>
-                        <th>
-                          Description
-                        </th>
-                        <th>
-                          Budget
-                        </th>
-                        <th>
-                          Status
-                        </th>
-                        <th>
-                          Start Date
-                        </th>
-                        <th>
-                          End Date
-                        </th>
-                                        
-                        <th class="text-center">
-                          Status
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    
 
-                  </table>
+      @include('Chatify::layouts.headLinks')
+
+      <div style="margin-left: 50px; margin-right: 50px;">
+        <div class="container mx-auto px-4">
+            <div class="messenger" data-id="{{ $id }}">
+                {{-- Messenger content --}}
+                <div class="messenger-listView">
+                    {{-- Users/Groups list side --}}
+                    <div class="m-header">
+                        <nav>
+                            <i class="fas fa-inbox"></i> <span class="messenger-headTitle">MESSAGES</span>
+                        </nav>
+                        <input type="text" class="messenger-search" placeholder="Search" />
+                    </div>
+                    <div class="m-body contacts-container">
+                        <div class="show messenger-tab users-tab app-scroll" data-view="users">
+                            <div class="favorites-section">
+                                <p class="messenger-title"><span>Favorites</span></p>
+                                <div class="messenger-favorites app-scroll-hidden"></div>
+                            </div>
+                            <p class="messenger-title"><span>Your Space</span></p>
+                            {!! view('Chatify::layouts.listItem', ['get' => 'saved']) !!}
+                            <p class="messenger-title"><span>All Messages</span></p>
+                            <div class="listOfContacts" style="width: 100%; height: calc(100% - 272px); position: relative;"></div>
+                        </div>
+                        <div class="messenger-tab search-tab app-scroll" data-view="search">
+                            <p class="messenger-title"><span>Search</span></p>
+                            <div class="search-records">
+                                <p class="message-hint center-el"><span>Type to search..</span></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+
+                {{-- Messaging side --}}
+                <div class="messenger-messagingView">
+                    <div class="m-header m-header-messaging">
+                        <nav class="chatify-d-flex chatify-justify-content-between chatify-align-items-center">
+                            <div class="chatify-d-flex chatify-justify-content-between chatify-align-items-center">
+                                <a href="#" class="show-listView"><i class="fas fa-arrow-left"></i></a>
+                                <div class="avatar av-s header-avatar" style="margin: 0px 10px;"></div>
+                                <a href="#" class="user-name">{{ config('chatify.name') }}</a>
+                            </div>
+                            <nav class="m-header-right">
+                                <a href="#" class="add-to-favorite"><i class="fas fa-star"></i></a>
+                                <a href="/dashboard"><i class="fas fa-home"></i></a>
+                                <a href="#" class="show-infoSide"><i class="fas fa-info-circle"></i></a>
+                            </nav>
+                        </nav>
+                        <div class="internet-connection">
+                            <span class="ic-connected">Connected</span>
+                            <span class="ic-connecting">Connecting...</span>
+                            <span class="ic-noInternet">No internet access</span>
+                        </div>
+                    </div>
+
+                    <div class="m-body messages-container app-scroll">
+                        <div class="messages">
+                            <p class="message-hint center-el"><span>Please select a chat to start messaging</span></p>
+                        </div>
+                        <div class="typing-indicator">
+                            <div class="message-card typing">
+                                <div class="message">
+                                    <span class="typing-dots">
+                                        <span class="dot dot-1"></span>
+                                        <span class="dot dot-2"></span>
+                                        <span class="dot dot-3"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @include('Chatify::layouts.sendForm')
+                </div>
+
+                {{-- Info side --}}
+                <div class="messenger-infoView app-scroll">
+                    <nav>
+                        <p>User Details</p>
+                        <a href="#"><i class="fas fa-times"></i></a>
+                    </nav>
+                    {!! view('Chatify::layouts.info')->render() !!}
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
+    @include('Chatify::layouts.modals')
+    @include('Chatify::layouts.footerLinks')
+
+
+
+        
+        
       <footer class="footer">
         <div class="container-fluid">      
           <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 text-center text-gray-500 dark:text-gray-400">
@@ -315,20 +280,9 @@
           <span class="badge dark-badge ml-2"></span>
           <span class="color-label">DARK MODE</span>
         </li>
-        <li class="button-container">
-          <a href="https://www.creative-tim.com/product/black-dashboard" target="_blank" class="btn btn-primary btn-block btn-round">Download Now</a>
-          <a href="https://demos.creative-tim.com/black-dashboard/docs/1.0/getting-started/introduction.html" target="_blank" class="btn btn-default btn-block btn-round">
-            Documentation
-          </a>
-        </li>
-        <li class="header-title">Thank you for 95 shares!</li>
-        <li class="button-container text-center">
-          <button id="twitter" class="btn btn-round btn-info"><i class="fab fa-twitter"></i> &middot; 45</button>
-          <button id="facebook" class="btn btn-round btn-info"><i class="fab fa-facebook-f"></i> &middot; 50</button>
-          <br>
-          <br>
-          <a class="github-button" href="https://github.com/creativetimofficial/black-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
-        </li>
+        
+        
+        
       </ul>
     </div>
   </div>

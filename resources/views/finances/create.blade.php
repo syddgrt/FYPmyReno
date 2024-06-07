@@ -9,6 +9,24 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
+
+                    
+                    <!-- Filter Form for Designers -->
+                    @if(auth()->user()->role == 'DESIGNER')
+                        <form method="GET" class="mb-4">
+                            <div class="flex items-center mb-4">
+                                <label for="client_id" class="mr-2">Filter by Client:</label>
+                                <select name="client_id" id="client_id" class="form-select" onchange="this.form.submit()">
+                                    <option value="">All Clients</option>
+                                    @foreach ($clients as $client)
+                                        <option value="{{ $client->id }}" {{ $client->id == $clientId ? 'selected' : '' }}>{{ $client->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </form>
+                    @endif
+
+
                     <!-- Form for Creating Financial Data -->
                     <form action="{{ route('finances.store') }}" method="POST">
                         @csrf
@@ -69,4 +87,39 @@
             </div>
         </div>
     </div>
+
+    <!-- JavaScript for Dynamic Filtering -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const clientDropdown = document.getElementById('client_id');
+            const projectDropdown = document.getElementById('project_id');
+
+            clientDropdown.addEventListener('change', function () {
+                const selectedClientId = this.value;
+                fetch(`/finances/create?client_id=${selectedClientId}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newProjectDropdown = doc.getElementById('project_id');
+                        projectDropdown.innerHTML = newProjectDropdown.innerHTML;
+                    });
+            });
+        });
+
+        clientDropdown.addEventListener('change', function () {
+            const selectedClientId = this.value;
+            fetch(`/finances/create?client_id=${selectedClientId}`)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newProjectDropdown = doc.getElementById('project_id');
+                    const clientBudget = doc.getElementById('clientBudget').innerText; // Get client budget text
+                    projectDropdown.innerHTML = newProjectDropdown.innerHTML;
+                    document.getElementById('clientBudget').innerText = "Client Budget: RM " + clientBudget; // Update client budget text
+                });
+        });
+
+    </script>
 </x-app-layout>

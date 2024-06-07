@@ -8,6 +8,7 @@ use App\Models\Projects;
 use App\Models\User;
 use App\Models\FinancialData;
 use App\Models\Collaborations;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -32,10 +33,56 @@ class AdminController extends Controller
     
 
     public function dashboard()
-    {
-        
-        return view('admin.dashboard');
+{
+    // Retrieve projects grouped by their creation date
+    $projectsByDate = Projects::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
+
+    // Prepare data for project chart
+    $projectDates = $projectsByDate->pluck('date')->map(function ($date) {
+        return Carbon::parse($date)->format('Y-m-d');
+    });
+    $projectCounts = $projectsByDate->pluck('count');
+
+    // Combine project dates and counts into a single array
+    $projectChartData = [];
+    foreach ($projectDates as $index => $date) {
+        $projectChartData[] = [
+            'date' => $date,
+            'count' => $projectCounts[$index],
+        ];
     }
+
+    // Retrieve users grouped by their creation month
+    $usersByMonth = User::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as count')
+        ->groupBy('year', 'month')
+        ->orderBy('year')
+        ->orderBy('month')
+        ->get();
+
+    // Prepare data for user chart
+    $timeframes = $usersByMonth->map(function ($user) {
+        return Carbon::createFromDate($user->year, $user->month)->format('M Y');
+    });
+    $userCounts = $usersByMonth->pluck('count');
+
+    // Combine timeframes and user counts into a single array
+    $userData = [];
+    foreach ($timeframes as $index => $timeframe) {
+        $userData[] = [
+            'timeframe' => $timeframe,
+            'count' => $userCounts[$index],
+        ];
+    }
+
+    return view('admin.dashboard', [
+        'projectChartData' => $projectChartData,
+        'userData' => $userData,
+    ]);
+}
+
 
 
     public function collaborations()
@@ -70,8 +117,13 @@ class AdminController extends Controller
 
     public function messages()
     {
-        return view('admin.messages');
+        $id = 1; // Replace 1 with the actual value or retrieve it from your database
+        $messengerColor = '#007bff'; // Example color
+        $dark_mode = false; // Example dark mode status
+
+        return view('admin.messages', compact('id', 'messengerColor', 'dark_mode'));
     }
+
 
     public function projects()
     {

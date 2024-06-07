@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request; // Import the correct Request class
 use App\Models\Projects; // Assuming Project model exists
@@ -16,6 +17,9 @@ class DashboardController extends Controller{
 {
     $user = Auth::user();
     $userRole = $user->role;
+
+    $designerCount = User::where('role', 'DESIGNER')->count();
+    $clientCount = User::where('role', 'CLIENT')->count();
 
     $activeCollaborations = [];
     if ($userRole === 'CLIENT') {
@@ -45,51 +49,43 @@ class DashboardController extends Controller{
         logger()->info('Designer active collaborations:', $activeCollaborations->toArray());
     }
 
+    $collaborations = Collaborations::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+    ->groupBy('date')
+    ->get();
+
     return view('dashboard', [
         'userRole' => $userRole,
-        'activeCollaborations' => $activeCollaborations
+        'activeCollaborations' => $activeCollaborations,
+        'designerCount' => $designerCount,
+        'clientCount' => $clientCount,
+        'collaborations' => $collaborations,
     ]);
 }
 
+public function showDesigners(Request $request)
+{
+    // Fetch all designers along with their portfolios
+    $designersQuery = User::where('role', 'DESIGNER')->with('portfolio');
 
-
-
-
-
-
-    public function search(Request $request)
-    {
-        $search = $request->input('search');
-        
-        $designers = User::where('role', 'DESIGNER')
-                         ->when($search, function ($query, $search) {
-                             return $query->where('name', 'like', '%' . $search . '%')
-                                          ->orWhere('email', 'like', '%' . $search . '%');
-                         })
-                         ->get();
-
-        return view('designers.index', compact('designers'));
+    // Filter by search query
+    $search = $request->input('search');
+    if ($search) {
+        $designersQuery->where('name', 'like', '%' . $search . '%');
     }
 
-    // public function search(Request $request)
-    // {
-    //     // Get the search query from the request
-    //     $query = $request->input('query');
+    $designers = $designersQuery->get();
 
-    //     // Perform the search using the Project model
-    //     $results = Projects::where('title', 'like', "%$query%")
-    //                       ->orWhere('description', 'like', "%$query%")
-    //                       ->get();
+    // Parse the specialization data into an array
+    $designers->each(function ($designer) {
+        if ($designer->portfolio) {
+            $designer->portfolio->specialization = explode(',', $designer->portfolio->specialization);
+        }
+    });
 
-    //     // Pass the search results to the view
-    //     return view('search-results', ['results' => $results]);
-    // }
+    return view('designers.index', compact('designers', 'search'));
+}
 
-    public function showDesigners()
-    {
-        $designers = User::where('role', 'DESIGNER')->get();
-        return view('designers.index', compact('designers'));
-    }   
+
 
     public function showPortfolio(User $designer)
     {
@@ -107,8 +103,14 @@ class DashboardController extends Controller{
 
     public function showDesignerProfile($id)
     {
-        $designer = User::findOrFail($id);
-
+        // Fetch the designer with their portfolio
+        $designer = User::with('portfolio')->findOrFail($id);
+    
+        // Parse the specialization data into an array
+        if ($designer->portfolio) {
+            $designer->portfolio->specialization = explode(',', $designer->portfolio->specialization);
+        }
+    
         return view('designers.profile', compact('designer'));
     }
 
@@ -128,5 +130,7 @@ class DashboardController extends Controller{
         // Redirect to the conversation view
         return redirect()->route('conversations.show', ['conversationId' => $conversation->id])->with('success', 'Conversation started successfully!');
     }
+
+
 
 }

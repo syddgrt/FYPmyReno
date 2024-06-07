@@ -15,6 +15,7 @@ class SchedulesController extends Controller
             'collaboration_id' => 'required|exists:collaborations,id',
             'date' => 'required|date',
             'time' => 'required|date_format:H:i',
+            'place' => 'required|string', // Add validation for place
         ]);
 
         Schedules::create($request->all());
@@ -27,6 +28,7 @@ class SchedulesController extends Controller
         $request->validate([
             'date' => 'required|date',
             'time' => 'required|date_format:H:i',
+            'place' => 'required|string', // Add validation for place
         ]);
 
         $schedule->update($request->all());

@@ -96,6 +96,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/finances', [FinancesController::class, 'store'])->name('finances.store');
     Route::get('/generate-pdf/{projectId}', [PDFController::class, 'generatePDF'])->name('generate.pdf');
 
+    Route::get('/client-engagement-data', [DashboardController::class, 'getClientEngagementData']);
+
+
     // Route::delete('/finances/{id}', [FinancesController::class, 'destroy'])->name('finances.destroy');
 
 

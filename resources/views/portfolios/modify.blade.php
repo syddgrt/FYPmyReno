@@ -24,25 +24,42 @@
                             <textarea name="description" id="description" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">{{ $portfolio->description }}</textarea>
                         </div>
                         
+                        <!-- Specialization checkboxes -->
+                        <div class="mb-4">
+                            <label for="specialization" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Specialization</label>
+                            <div class="mt-2">
+                                @php
+                                    $specializations = ['contemporary', 'modern', 'classic', 'minimalist', 'rustic'];
+                                    $portfolioSpecializations = explode(',', $portfolio->specialization);
+                                @endphp
+                                @foreach($specializations as $specialization)
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="specialization[]" value="{{ $specialization }}" {{ in_array($specialization, $portfolioSpecializations) ? 'checked' : '' }} class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                        <span class="ml-2 text-gray-700 dark:text-gray-300">{{ ucfirst($specialization) }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        
                         <!-- Image or text description selection -->
                         <div class="mb-4">
                             <label for="submission_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Submission Type</label>
                             <select name="submission_type" id="submission_type" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                                <option value="image" selected>Image</option>
-                                <option value="text">Text Description</option>
+                                <option value="image" {{ $portfolio->submission_type == 'image' ? 'selected' : '' }}>Image</option>
+                                <option value="text" {{ $portfolio->submission_type == 'text' ? 'selected' : '' }}>Text Description</option>
                             </select>
                         </div>
                         
                         <!-- Image upload input -->
-                        <div class="mb-4" id="image_upload">
+                        <div class="mb-4" id="image_upload" style="{{ $portfolio->submission_type == 'text' ? 'display: none;' : '' }}">
                             <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image</label>
                             <input type="file" name="image" id="image" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         
                         <!-- Text description input -->
-                        <div class="mb-4" id="text_description" style="display: none;">
+                        <div class="mb-4" id="text_description" style="{{ $portfolio->submission_type == 'image' ? 'display: none;' : '' }}">
                             <label for="text_description_content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Text Description</label>
-                            <textarea name="text_description_content" id="text_description_content" rows="5" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                            <textarea name="text_description_content" id="text_description_content" rows="5" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">{{ $portfolio->text_description_content }}</textarea>
                         </div>
                         
                         <!-- Submit button -->

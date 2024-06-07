@@ -1,5 +1,3 @@
-<!-- edit.blade.php -->
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -25,9 +23,10 @@
                         <div class="mb-4">
                             <label for="status" class="block text-gray-700 text-sm font-bold mb-2">Status:</label>
                             <select name="status" id="status" class="form-select rounded-md shadow-sm mt-1 block w-full">
-                                <option value="Pending" {{ $project->status == 'Open' ? 'selected' : '' }}>Open</option>
                                 <option value="In View" {{ $project->status == 'In View' ? 'selected' : '' }}>In View</option>
-                                <option value="Finished" {{ $project->status == 'Finished' ? 'selected' : '' }}>Finished</option>
+                                @if ($hasActiveCollaboration)
+                                    <option value="Finished" {{ $project->status == 'Finished' ? 'selected' : '' }}>Finished</option>
+                                @endif
                             </select>
                         </div>
                         <div class="mt-4">
