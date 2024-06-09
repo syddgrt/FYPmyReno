@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for fypmyreno on 2024-05-26T22:20:36+08:00
+# fly.toml app configuration file generated for myreno on 2024-06-09T19:40:30+08:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'fypmyreno'
+app = 'myreno'
 primary_region = 'hkg'
 console_command = 'php /var/www/html/artisan tinker'
 

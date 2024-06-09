@@ -30,8 +30,6 @@ class AdminController extends Controller
         return redirect()->route('admin.login')->withErrors(['email' => 'The provided credentials do not match our records.']);
     }
 
-    
-
     public function dashboard()
 {
     // Retrieve projects grouped by their creation date
@@ -56,7 +54,7 @@ class AdminController extends Controller
     }
 
     // Retrieve users grouped by their creation month
-    $usersByMonth = User::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as count')
+    $usersByMonth = User::selectRaw('EXTRACT(YEAR FROM created_at) as year, EXTRACT(MONTH FROM created_at) as month, COUNT(*) as count')
         ->groupBy('year', 'month')
         ->orderBy('year')
         ->orderBy('month')
@@ -77,12 +75,31 @@ class AdminController extends Controller
         ];
     }
 
+    // Additional data for donut chart (example: project status)
+    $projectStatuses = Projects::selectRaw('status, COUNT(*) as count')
+        ->groupBy('status')
+        ->get();
+
+    $statusLabels = $projectStatuses->pluck('status');
+    $statusCounts = $projectStatuses->pluck('count');
+
+    // Additional data for another chart (example: user roles)
+    $userRoles = User::selectRaw('role, COUNT(*) as count')
+        ->groupBy('role')
+        ->get();
+
+    $roleLabels = $userRoles->pluck('role');
+    $roleCounts = $userRoles->pluck('count');
+
     return view('admin.dashboard', [
         'projectChartData' => $projectChartData,
         'userData' => $userData,
+        'statusLabels' => $statusLabels,
+        'statusCounts' => $statusCounts,
+        'roleLabels' => $roleLabels,
+        'roleCounts' => $roleCounts,
     ]);
 }
-
 
 
     public function collaborations()
@@ -123,7 +140,6 @@ class AdminController extends Controller
 
         return view('admin.messages', compact('id', 'messengerColor', 'dark_mode'));
     }
-
 
     public function projects()
     {

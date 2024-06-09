@@ -187,7 +187,44 @@
                             </div>
                         </div>
                     </div>
+                  </div>
+                  <!-- Donut Chart -->
+<div class="col-lg-6">
+    <div class="card card-chart">
+        <div class="card-header ">
+            <div class="row">
+                <div class="col-sm-6 text-left">
+                    <h5 class="card-category">Project Status</h5>
                 </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <!-- Adjust canvas size -->
+            <div class="chart-area" style="height: 600px;">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bar Chart -->
+<div class="col-lg-6">
+    <div class="card card-chart">
+        <div class="card-header ">
+            <div class="row">
+                <div class="col-sm-6 text-left">
+                    <h5 class="card-category">User Roles</h5>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <!-- Adjust canvas size -->
+            <div class="chart-area" style="height: 300px;">
+                <canvas id="roleChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
                 </div>
                 
               </div>
@@ -249,10 +286,9 @@
       </ul>
     </div>
   </div>
-  <!-- Chart JS -->
-  <!-- Chart JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
-<script>
+  Chart JS
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+  <script>
     // Function to format date as DD-MM-YYYY
     function formatDate(date) {
         var day = date.getDate();
@@ -308,6 +344,56 @@
                 data: userCounts,
                 backgroundColor: 'rgba(255, 159, 64, 0.2)',
                 borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Donut Chart
+    var statusLabels = {!! json_encode($statusLabels) !!};
+    var statusCounts = {!! json_encode($statusCounts) !!};
+
+    var statusChartCtx = document.getElementById('statusChart').getContext('2d');
+    var statusChart = new Chart(statusChartCtx, {
+        type: 'doughnut',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusCounts,
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+            }
+        }
+    });
+
+    // Bar Chart
+    var roleLabels = {!! json_encode($roleLabels) !!};
+    var roleCounts = {!! json_encode($roleCounts) !!};
+
+    var roleChartCtx = document.getElementById('roleChart').getContext('2d');
+    var roleChart = new Chart(roleChartCtx, {
+        type: 'bar',
+        data: {
+            labels: roleLabels,
+            datasets: [{
+                label: 'User Roles',
+                data: roleCounts,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             }]
         },
