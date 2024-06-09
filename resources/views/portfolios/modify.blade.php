@@ -46,7 +46,6 @@
                             <label for="submission_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Submission Type</label>
                             <select name="submission_type" id="submission_type" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                                 <option value="image" {{ $portfolio->submission_type == 'image' ? 'selected' : '' }}>Image</option>
-                                <option value="text" {{ $portfolio->submission_type == 'text' ? 'selected' : '' }}>Text Description</option>
                             </select>
                         </div>
                         
@@ -56,11 +55,6 @@
                             <input type="file" name="image" id="image" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         
-                        <!-- Text description input -->
-                        <div class="mb-4" id="text_description" style="{{ $portfolio->submission_type == 'image' ? 'display: none;' : '' }}">
-                            <label for="text_description_content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Text Description</label>
-                            <textarea name="text_description_content" id="text_description_content" rows="5" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">{{ $portfolio->text_description_content }}</textarea>
-                        </div>
                         
                         <!-- Submit button -->
                         <div class="flex justify-end">
