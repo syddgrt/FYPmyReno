@@ -175,7 +175,7 @@
                         </th>
 
                         <th>
-                          Estimation Cost (by Designer)
+                          Actual Cost (by Designer)
                         </th>
                        
                         <th>

@@ -139,7 +139,7 @@
             <th>Amount (RM)</th>
         </tr>
         <tr>
-            <td>Estimation Cost</td>
+            <td>Actual Cost</td>
             <td>{{ number_format($finance->actual_cost, 2) }}</td>
         </tr>
         <tr>

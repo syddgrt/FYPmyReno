@@ -40,8 +40,8 @@
                                     <tr class="bg-gray-200">
                                         <th class="px-1.5 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Project ID</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Project Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Client Budget</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Estimation Cost</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Estimation/Proposed Cost</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Actual Cost</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Tax</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Additional Fees</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Total Cost</th>
@@ -88,7 +88,7 @@
                         <h2 class="text-xl font-semibold mb-2">Total Summary</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div class="bg-green-500 text-white p-4 rounded">
-                                <h3 class="text-lg font-semibold mb-2">Total Actual Cost</h3>
+                                <h3 class="text-lg font-semibold mb-2">Total Estimation Cost</h3>
                                 <p class="text-3xl font-bold">RM{{ number_format($totalActualCost, 2) }}</p>
                             </div>
                             <div class="bg-yellow-500 text-white p-4 rounded">

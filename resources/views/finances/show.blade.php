@@ -66,12 +66,17 @@
                     <canvas id="analyticsChartCanvas" style="display: none;"></canvas>
                     <canvas id="pieChartCanvas" style="display: none;"></canvas>
 
-
                     <!-- PDF Generation Button -->
-                    <div class="mt-8">
+                    <div class="mt-8 flex space-x-4">
                         <a href="{{ route('generate.pdf', $project->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Download PDF
                         </a>
+                        @if(auth()->user()->role == 'CLIENT')
+                        <a href="{{ route('payment', $project->id) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Make a Payment
+                        </a>
+
+                        @endif
                     </div>
                 </div>
             </div>
@@ -91,7 +96,7 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Proposed Cost', 'Estimation Cost', 'Tax', 'Additional Fees', 'Total Cost'],
+                labels: ['Proposed/Estimation Cost', 'Actual Cost', 'Tax', 'Additional Fees', 'Total Cost'],
                 datasets: [{
                     label: 'Amount in RM',
                     data: [costEstimation, actualCost, tax, additionalFees, totalCost],
@@ -126,7 +131,7 @@
         new Chart(pieCtx, {
             type: 'pie',
             data: {
-                labels: ['Proposed Cost', 'Estimation Cost', 'Tax', 'Additional Fees', 'Total Cost'],
+                labels: ['Proposed/Estimation Cost', 'Actual Cost', 'Tax', 'Additional Fees', 'Total Cost'],
                 datasets: [{
                     label: 'Amount in RM',
                     data: [costEstimation, actualCost, tax, additionalFees, totalCost],
@@ -148,8 +153,9 @@
                 }]
             }
         });
-         // Pass chart images to PDF generation endpoint
-         document.addEventListener('DOMContentLoaded', function() {
+
+        // Pass chart images to PDF generation endpoint
+        document.addEventListener('DOMContentLoaded', function() {
             var analyticsChartImage = canvasToDataURL('analyticsChartCanvas');
             var pieChartImage = canvasToDataURL('pieChartCanvas');
             var pdfButton = document.querySelector('.pdf-button');

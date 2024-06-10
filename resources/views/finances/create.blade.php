@@ -51,7 +51,7 @@
 
                             <!-- Cost Estimation (Visible to all users) -->
                             <div>
-                                <label for="cost_estimation" class="block text-sm font-medium text-gray-700">Proposed Cost (RM)</label>
+                                <label for="cost_estimation" class="block text-sm font-medium text-gray-700">Proposed/Estimation Cost (RM)</label>
                                 <input type="number" name="cost_estimation" id="cost_estimation" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
 
@@ -59,7 +59,7 @@
                             @if(auth()->user()->role == 'DESIGNER')
                                 <!-- Actual Cost -->
                                 <div>
-                                    <label for="actual_cost" class="block text-sm font-medium text-gray-700">Estimation Cost (RM)</label>
+                                    <label for="actual_cost" class="block text-sm font-medium text-gray-700">Actual Cost (RM)</label>
                                     <input type="number" name="actual_cost" id="actual_cost" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                 </div>
 

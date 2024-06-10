@@ -15,6 +15,7 @@ use App\Http\Controllers\ReviewsController;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\GuideController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,6 +107,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/appointments', [SchedulesController::class, 'create'])->name('appointments.create');
     Route::post('/appointments', [SchedulesController::class, 'store'])->name('schedules.store');
     Route::get('/appointments/{id}', [SchedulesController::class, 'show'])->name('appointments.show');
+
+    Route::get('/payment/{project}', [PaymentController::class, 'showPaymentPage'])->name('payment');
+    Route::post('/payment/{project}', [PaymentController::class, 'processPayment'])->name('process.payment');
 
     Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
 

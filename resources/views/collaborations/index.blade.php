@@ -42,37 +42,38 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($request->status) }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $request->project->status }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($request->status === 'accepted')
-                                            <a href="{{ route('projects.edit', $request->project_id) }}" class="fa fa-edit bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"></a>
+                                    @if($request->status === 'accepted')
+                                        <a href="{{ route('projects.edit', $request->project_id) }}" class="fa fa-edit bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"></a>
 
-                                            @if($userRole === 'DESIGNER')
-                                                @if($request->project->financialData)
-                                                    <a href="{{ route('finances.show', $request->project_id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View Finance</a>
-                                                @else
-                                                    <a href="{{ route('finances.create', ['project_id' => $request->project_id]) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Create Finance</a>
-                                                @endif
+                                        @if($userRole === 'DESIGNER')
+                                            @if($request->project->financialData)
+                                                <a href="{{ route('finances.show', $request->project_id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View Finance</a>
+                                            @else
+                                                <a href="{{ route('finances.create', ['project_id' => $request->project_id]) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Create Finance</a>
+                                            @endif
 
-                                                @if($request->appointment)
-                                                    <a href="{{ route('appointments.show', $request->appointment->id) }}" class="bg-yellow-500 text-white px-2 py-2 rounded hover:bg-yellow-600">
-                                                        View Appointment
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('appointments.create', ['collaboration_id' => $request->id, 'project_id' => $request->project_id]) }}" class="bg-yellow-500 text-white px-2 py-2 rounded hover:bg-yellow-600">
-                                                        Set Appointment
-                                                    </a>
-                                                @endif
-                                            @elseif($userRole === 'CLIENT' && $request->appointment)
+                                            @if($request->appointment)
+                                                <a href="{{ route('appointments.show', $request->appointment->id) }}" class="bg-yellow-500 text-white px-2 py-2 rounded hover:bg-yellow-600">
+                                                    View Appointment
+                                                </a>
+                                            @else
+                                                <a href="{{ route('appointments.create', ['collaboration_id' => $request->id, 'project_id' => $request->project_id]) }}" class="bg-yellow-500 text-white px-2 py-2 rounded hover:bg-yellow-600">
+                                                    Set Appointment
+                                                </a>
+                                            @endif
+                                        @elseif($userRole === 'CLIENT')
+                                            @if($request->project->financialData)
+                                                <a href="{{ route('finances.show', $request->project_id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View Finance</a>
+                                            @endif
 
-                                                @if($request->project->financialData)
-                                                    <a href="{{ route('finances.show', $request->project_id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View Finance</a>
-                                                @endif
-
+                                            @if($request->appointment)
                                                 <a href="{{ route('appointments.show', $request->appointment->id) }}" class="bg-yellow-500 text-white px-2 py-2 rounded hover:bg-yellow-600">
                                                     View Appointment
                                                 </a>
                                             @endif
-
                                         @endif
+                                    @endif
+
                                     </td>
                                 </tr>
                             @empty
