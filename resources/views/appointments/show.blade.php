@@ -1,5 +1,3 @@
-<!-- view.blade.php -->
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -16,6 +14,17 @@
                     <p>Time: {{ $appointment->time }}</p>
                     <p>Place: {{ $appointment->place }}</p>
                     <!-- Add more appointment details here as needed -->
+
+                    <!-- Edit and Delete buttons -->
+                    <div class="mt-4 flex justify-between">
+                        <a href="{{ route('appointments.edit', $appointment->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Edit</a>
+                        
+                        <form action="{{ route('appointments.destroy', $appointment->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

@@ -53,12 +53,18 @@ class DashboardController extends Controller{
     ->groupBy('date')
     ->get();
 
+    // Fetch project status data
+    $projectStatus = Projects::selectRaw('status, COUNT(*) as count')
+        ->groupBy('status')
+        ->get();
+
     return view('dashboard', [
         'userRole' => $userRole,
         'activeCollaborations' => $activeCollaborations,
         'designerCount' => $designerCount,
         'clientCount' => $clientCount,
         'collaborations' => $collaborations,
+        'projectStatus' => $projectStatus, // Pass project status data to the view
     ]);
 }
 

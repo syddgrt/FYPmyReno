@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ Auth::user()->role === 'CLIENT' ? __('My Collaboration Requests') : __('Active Collaborations') }}
+            {{ Auth::user()->role === 'CLIENT' ? __('My Collaborations') : __('Active Collaborations') }}
         </h2>
     </x-slot>
 
@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <h1 class="text-2xl font-semibold mb-4">{{ Auth::user()->role === 'CLIENT' ? 'Collaboration Requests for My Projects' : 'My Active Collaborations' }}</h1>
+                    <h1 class="text-2xl font-semibold mb-4">{{ Auth::user()->role === 'CLIENT' ? 'My Collaborations' : 'My Collaborations' }}</h1>
 
                     <form method="GET" action="{{ route('collaborations.index') }}" class="mb-4">
                         <div class="flex items-center">
@@ -42,9 +42,16 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($request->status) }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $request->project->status }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($request->status === 'accepted')
-                                        <a href="{{ route('projects.edit', $request->project_id) }}" class="fa fa-edit bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"></a>
 
+                                    @if ($request->status === 'pending' && Auth::user()->role === 'CLIENT')
+                                            <form action="{{ route('collaborations.update', $request->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" name="status" value="accepted" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded">Accept</button>
+                                                <button type="submit" name="status" value="denied" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Reject</button>
+                                            </form>
+                                    @elseif($request->status === 'accepted')
+                                        <a href="{{ route('projects.edit', $request->project_id) }}" class="fa fa-edit bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"></a>
                                         @if($userRole === 'DESIGNER')
                                             @if($request->project->financialData)
                                                 <a href="{{ route('finances.show', $request->project_id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View Finance</a>
@@ -73,6 +80,7 @@
                                             @endif
                                         @endif
                                     @endif
+                                    
 
                                     </td>
                                 </tr>

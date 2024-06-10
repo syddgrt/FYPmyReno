@@ -12,7 +12,7 @@
 
         @if($userRole === 'CLIENT')
             <!-- For Clients -->
-            <h2 class="bg-gray-300 text-gray-600 px-2.5 py-1.5 rounded-full uppercase text-xs font-bold mb-4">For Clients:</h2>
+            <h2 class="bg-gray-300 text-gray-600 px-2.5 py-1.5 rounded text-lg font-semibold mb-2">For Clients:</h2>
             <div class="space-y-4">
                 <div class="bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">
                     <p class="font-semibold">Creating Projects:</p>
@@ -62,7 +62,8 @@
 
         @elseif($userRole === 'DESIGNER')
             <!-- For Designers -->
-            <h2 class="text-lg font-semibold mb-2">For Designers:</h2>
+            <h2 class="bg-gray-300 text-gray-600 px-2.5 py-1.5 rounded text-lg font-semibold mb-2">For Designers:</h2>
+            
             <div class="space-y-4">
                 <div class="bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">
                     <p class="font-semibold">Initiating Collaborations:</p>

@@ -42,15 +42,49 @@
             <span class="bg-blue-200 text-blue-800 px-2 py-1 rounded-full uppercase text-xs font-bold mr-2">{{ $userRole }}</span>
         </div>
     </x-slot>
+    
 
 <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">      
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">   
+    <div class="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-2 gap-4">
+            @if($userRole === 'CLIENT')
+            <!-- Total Designers -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <h3 class="font-semibold text-lg mb-2">Total Designers</h3>
+                    <p class="text-sm">Number of designers currently registered in the system.</p>
+                    <p class="text-3xl font-bold text-center ">{{ $designerCount }}</p>
+                    
+                </div>
+            </div>
+            @endif
+
+            @if($userRole === 'DESIGNER')
+            <!-- Total Clients -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <h3 class="font-semibold text-lg mb-2">Total Clients</h3>
+                    <p class="text-sm">Number of clients currently registered in the system.</p>
+                    <p class="mt-2 text-3xl font-bold text-center">{{ $clientCount }}</p>
+                </div>
+            </div>
+            @endif
+
+            <!-- Number of Collaborations -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <h3 class="font-semibold text-lg mb-2">Number of Collaborations</h3>
+                    <p class="text-sm">Total number of projects you are collaborating on.</p>
+                    <p class="mt-2 text-3xl font-bold text-center">{{ $activeCollaborations->count() }}</p>
+                </div>
+            </div>
+        </div>   
         <div class="chart-container grid gap-4 mb-4">
-            <!-- Donut Chart -->
+            <!-- Donut Chart for Project Status -->
             <div class="chart-wrapper-1 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-4">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="font-semibold text-lg mb-2">Roles Distribution in System</h3>
-                    <canvas id="userRolesChart"></canvas>
+                    <h3 class="font-semibold text-lg mb-2">Project Status</h3>
+                    <canvas id="projectStatusChart"></canvas>
                 </div>
             </div>
 
@@ -248,20 +282,24 @@
     </div>
 
     <script>
-        // Data for User Roles Distribution Chart
-        const userRolesCtx = document.getElementById('userRolesChart').getContext('2d');
-        const userRolesChart = new Chart(userRolesCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Designers', 'Clients'],
-                datasets: [{
-                    label: 'User Roles',
-                    data: [{{ $designerCount }}, {{ $clientCount }}],
-                    backgroundColor: ['#4caf50', '#ff9800'],
-                    hoverOffset: 4
-                }]
-            }
-        });
+        // Data for Project Status Donut Chart
+const projectStatusCtx = document.getElementById('projectStatusChart').getContext('2d');
+const projectStatusLabels = {!! json_encode($projectStatus->pluck('status')->toArray()) !!};
+const projectStatusCounts = {!! json_encode($projectStatus->pluck('count')->toArray()) !!};
+
+const projectStatusChart = new Chart(projectStatusCtx, {
+    type: 'doughnut',
+    data: {
+        labels: projectStatusLabels,
+        datasets: [{
+            label: 'Project Status',
+            data: projectStatusCounts,
+            backgroundColor: ['#fc8181', '#faf089', '#9ae6b4'],
+            hoverOffset: 4
+        }]
+    }
+});
+
 
         // Data for Collaborations Over Time Chart
         const collaborationsCtx = document.getElementById('collaborationsChart').getContext('2d');

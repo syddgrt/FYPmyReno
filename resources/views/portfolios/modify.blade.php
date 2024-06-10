@@ -50,11 +50,11 @@
                         </div>
                         
                         <!-- Image upload input -->
-                        <div class="mb-4" id="image_upload" style="{{ $portfolio->submission_type == 'text' ? 'display: none;' : '' }}">
-                            <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image</label>
-                            <input type="file" name="image" id="image" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                        
+<div class="mb-4" id="image_upload" style="{{ $portfolio->submission_type == 'text' ? 'display: none;' : '' }}">
+    <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image</label>
+    <input type="file" name="image" id="image" class="mt-1 p-2 w-full border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" style="background-color: white;">
+</div>
+
                         
                         <!-- Submit button -->
                         <div class="flex justify-end">
@@ -65,6 +65,19 @@
             </div>
         </div>
     </div>
+    
+    <!-- SweetAlert2 script for success message -->
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
 </x-app-layout>
 
 <script>

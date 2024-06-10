@@ -45,7 +45,7 @@
                         <div class="mb-4">
                             <label for="meeting_type" class="block text-gray-700 text-sm font-bold mb-2">Meeting Type:</label>
                             <select name="meeting_type" id="meeting_type" class="form-input rounded-md shadow-sm mt-1 block w-full" required>
-                                <option value="online" selected>Online</option> <!-- Corrected "Onlizne" to "Online" -->
+                                <option value="online" selected>Online</option>
                                 <option value="physical">Physical</option>                               
                             </select>
                         </div>
@@ -71,6 +71,16 @@
             </div>
         </div>
     </div>
+
+    <!-- Display success message -->
+    @if(session('success'))
+        <script>
+            window.location.href = 'http://127.0.0.1:8000/collaboration-requests';
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        </script>
+    @endif
 
     <!-- Google Maps API and Places Library -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUqiIfEi5XPW6cA8ZwzW0qB9Pwfh1FC-g&libraries=places&callback=initMap" async defer></script>

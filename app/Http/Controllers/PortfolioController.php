@@ -43,9 +43,11 @@ class PortfolioController extends Controller
             // Pass the portfolio data to the view
             return view('portfolios.show', compact('portfolio'));
         } else {
-            abort(404, 'Portfolio not found.');
+            // Redirect to modify page if portfolio does not exist
+            return redirect()->route('portfolios.modify')->with('info', 'Please create your portfolio first.');
         }
     }
+
 
     public function modify(Request $request)
     {

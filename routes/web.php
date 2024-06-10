@@ -107,6 +107,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/appointments', [SchedulesController::class, 'create'])->name('appointments.create');
     Route::post('/appointments', [SchedulesController::class, 'store'])->name('schedules.store');
     Route::get('/appointments/{id}', [SchedulesController::class, 'show'])->name('appointments.show');
+    Route::get('/appointments/{appointment}/edit', [SchedulesController::class, 'edit'])->name('appointments.edit');
+    Route::put('/appointments/{appointment}', [SchedulesController::class, 'update'])->name('appointments.update');
+    Route::delete('/appointments/{appointment}', [SchedulesController::class, 'destroy'])->name('appointments.destroy');
 
     Route::get('/payment/{project}', [PaymentController::class, 'showPaymentPage'])->name('payment');
     Route::post('/payment/{project}', [PaymentController::class, 'processPayment'])->name('process.payment');

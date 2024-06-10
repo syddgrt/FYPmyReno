@@ -30,7 +30,7 @@
 
                         <div class="mb-4">
                             <label for="budget" class="block text-gray-700 text-sm font-bold mb-2">{{ __('Budget') }} (RM)</label>
-                            <input id="budget" type="number" class="form-input rounded-md shadow-sm mt-1 block w-full @error('budget') is-invalid @enderror" name="budget" value="{{ old('budget') }}" required >
+                            <input id="budget" type="number" class="form-input rounded-md shadow-sm mt-1 block w-full @error('budget') is-invalid @enderror" name="budget" value="{{ old('budget') }}" required>
                             @error('budget')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
@@ -52,4 +52,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Display success message -->
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
 </x-app-layout>

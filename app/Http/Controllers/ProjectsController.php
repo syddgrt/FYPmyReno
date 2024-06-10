@@ -64,38 +64,38 @@ class ProjectsController extends Controller
      */
 
      public function store(StoreProjectsRequest $request)
-     {
-         $request->validate([
-             'title' => 'required|string|max:255',
-             'description' => 'required|string',
-             'budget' => 'required|numeric|min:0',
-             'attachments.*' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
-         ]);
-     
-         // Create a new project instance
-         $project = new Projects();
-         $project->user_id = Auth::id();
-         $project->title = $request->input('title');
-         $project->description = $request->input('description');
-         $project->budget = $request->input('budget');
-         $project->save(); // Save the project first
-     
-         // Handle attachments
-         if ($request->hasFile('attachments')) {
-             foreach ($request->file('attachments') as $file) {
-                 $attachmentPath = $file->store('public/attachments');
-                 $attachmentPath = str_replace('public/', '', $attachmentPath);
-                 $attachment = new ProjectAttachment();
-                 $attachment->project_id = $project->id; // Use the project's id after it has been saved
-                 $attachment->file_path = $attachmentPath;
-                 $attachment->type = 'default'; // Set a default value for the type
-                 $attachment->save();
-             }
-         }
-     
-         // Redirect the user to a relevant page
-         return redirect()->route('projects.index')->with('success', 'Project created successfully!');
-     }
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'budget' => 'required|numeric|min:0',
+        'attachments.*' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
+    ]);
+
+    // Create a new project instance
+    $project = new Projects();
+    $project->user_id = Auth::id();
+    $project->title = $request->input('title');
+    $project->description = $request->input('description');
+    $project->budget = $request->input('budget');
+    $project->save(); // Save the project first
+
+    // Handle attachments
+    if ($request->hasFile('attachments')) {
+        foreach ($request->file('attachments') as $file) {
+            $attachmentPath = $file->store('public/attachments');
+            $attachmentPath = str_replace('public/', '', $attachmentPath);
+            $attachment = new ProjectAttachment();
+            $attachment->project_id = $project->id; // Use the project's id after it has been saved
+            $attachment->file_path = $attachmentPath;
+            $attachment->type = 'default'; // Set a default value for the type
+            $attachment->save();
+        }
+    }
+
+    // Redirect the user to a relevant page
+    return redirect()->route('projects.index')->with('success', 'Project created successfully!');
+}
      
     /**
      * Display the specified resource.
@@ -151,17 +151,17 @@ class ProjectsController extends Controller
     // ProjectsController.php
 
     public function update(Request $request, Projects $project)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'status' => 'required|in:Pending,In View,Finished',
-        ]);
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'status' => 'required|in:Pending,In View,Finished',
+    ]);
 
-        $project->update($request->all());
+    $project->update($request->all());
 
-        return redirect()->route('projects.index')->with('success', 'Project updated successfully!');
-    }
+    return redirect()->route('projects.index')->with('success', 'Project updated successfully!');
+}
 
     public function destroy(Projects $project)
     {

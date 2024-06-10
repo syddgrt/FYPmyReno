@@ -39,4 +39,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Display success message -->
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
 </x-app-layout>
