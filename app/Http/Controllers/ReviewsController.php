@@ -21,13 +21,12 @@ class ReviewsController extends Controller
         // Get the accepted collaboration associated with the project
         $collaboration = $project->collaborations()->where('status', 'accepted')->first();
         $designer = $collaboration->designer;
-        
+
         return view('reviews.create', compact('project', 'collaboration', 'designer'));
     }
 
     public function store(Request $request)
     {
-        
         $request->validate([
             'project_id' => 'required|exists:projects,id',
             'collaboration_id' => 'required|exists:collaborations,id',
@@ -37,7 +36,7 @@ class ReviewsController extends Controller
         ]);
 
         $project = Projects::findOrFail($request->input('project_id'));
-        
+
         // Ensure the project is finished and the user is a client
         if ($project->status === 'Finished' && Auth::user()->id === $project->user_id) {
             Reviews::create([

@@ -1,8 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Schedule Appointment') }}
-        </h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Schedule Appointment') }}
+            </h2>
+            <h3 class="font-semibold text-lg text-gray-800 dark:text-gray-200 leading-tight mt-2">
+                {{ __('For Client') }}: <span class="text-blue-600 dark:text-black-400">{{ $client->name }}</span>
+            </h3>
     </x-slot>
 
     <div class="py-12">
@@ -23,14 +26,13 @@
                         @csrf
 
                         <div class="mb-4">
-                            <label for="collaboration_id" class="block text-gray-700 text-sm font-bold mb-2">Collaboration ID: {{ request()->input('collaboration_id') }}</label>
-                            <input type="hidden" name="collaboration_id" value="{{ request()->input('collaboration_id') }}">
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="project_id" class="block text-gray-700 text-sm font-bold mb-2">Project ID: {{ request()->input('project_id') }}</label>
+                            <label for="project_id" class="block text-gray-700 text-sm font-bold mb-2">Project:</label>
+                            <div class="bg-blue-500 text-white px-4 py-2 rounded-full inline-block">
+                                {{ $project->title }}
+                            </div>
                             <input type="hidden" name="project_id" value="{{ request()->input('project_id') }}">
                         </div>
+
 
                         <div class="mb-4">
                             <label for="date" class="block text-gray-700 text-sm font-bold mb-2">Date:</label>

@@ -1,4 +1,4 @@
-<title>myReno - Projects</title>
+<title>myReno</title>
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">

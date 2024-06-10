@@ -74,16 +74,6 @@
     @endif
                 </div>
 
-            <!-- Search Form
-            <form method="GET" action="{{ route('dashboard.search') }}" class="hidden sm:flex items-center">
-                <input type="text" name="query" placeholder="Search..." class="mr-2 border border-gray-300 rounded-md py-1 px-3 focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
-                <button type="submit" class="bg-blue-500 text-white py-1 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Search</button>
-            </form> -->
-
-            <div class="flex flex-col justify-center">
-                <!-- <a href="{{ route('projects.create') }}" class="ml-3 bg-white rounded-lg p-2"> -->
-            </div>
-
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">

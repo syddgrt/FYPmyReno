@@ -1,21 +1,26 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Leave a Review') }}
+    
+        <h2 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">
+            Review for: <span class="text-blue-600 dark:text-blue-400">{{ $project->title }}</span>
         </h2>
-    </x-slot>
+        <h3 class="mt-2 font-medium text-xl text-gray-600 dark:text-gray-300 leading-tight">
+            Designer: <span class="text-blue-600 dark:text-black-400">{{ $designer->name }}</span>
+        </h3>
+    
+</x-slot>
+
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form action="{{ route('reviews.store', $project) }}" method="POST" id="reviewForm">
-                            
                         @csrf
-    <input type="hidden" name="project_id" value="{{ $project->id }}">
-    <input type="hidden" name="designer_id" value="{{ $designer->id }}">
-    <input type="hidden" name="collaboration_id" value="{{ $collaboration->id }}"> <!-- Add this line -->
-                        
+                        <input type="hidden" name="project_id" value="{{ $project->id }}">
+                        <input type="hidden" name="designer_id" value="{{ $designer->id }}">
+                        <input type="hidden" name="collaboration_id" value="{{ $collaboration->id }}">
+
                         <div class="mb-4">
                             <label for="rating" class="block text-gray-700 text-sm font-bold mb-2">Rating:</label>
                             <div class="flex items-center">
@@ -29,12 +34,21 @@
                                 <div class="ml-2 rating-value">0</div>
                             </div>
                         </div>
-                        
+
                         <div class="mb-4">
                             <label for="feedback" class="block text-gray-700 text-sm font-bold mb-2">Feedback:</label>
                             <textarea name="feedback" id="feedback" class="form-textarea rounded-md shadow-sm mt-1 block w-full" rows="4"></textarea>
                         </div>
-                        
+
+                        <div class="mb-4">
+                            <label for="designer" class="block text-gray-700 text-sm font-bold mb-2">Designer:</label>
+                            <p id="designer" class="text-gray-700">{{ $designer->name }}</p>
+                        </div>
+                        <div class="mb-4">
+                            <label for="designer" class="block text-gray-700 text-sm font-bold mb-2">Designer Email:</label>
+                            <p id="designer" class="text-gray-700">{{ $designer->email }}</p>
+                        </div>
+
                         <div class="mt-4">
                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 Submit Review
@@ -81,16 +95,16 @@
         }
     </style>
 
-<script>
-    const stars = document.querySelectorAll('.rating input');
-    const ratingValue = document.querySelector('.rating-value');
+    <script>
+        const stars = document.querySelectorAll('.rating input');
+        const ratingValue = document.querySelector('.rating-value');
 
-    stars.forEach((star) => {
-        star.addEventListener('click', () => {
-            const rating = star.value;
-            ratingValue.textContent = rating;
-            document.querySelector('input[name="rating"]').value = rating;
+        stars.forEach((star) => {
+            star.addEventListener('click', () => {
+                const rating = star.value;
+                ratingValue.textContent = rating;
+                document.querySelector('input[name="rating"]').value = rating;
+            });
         });
-    });
-</script>
+    </script>
 </x-app-layout>
