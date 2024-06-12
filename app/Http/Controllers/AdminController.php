@@ -31,75 +31,77 @@ class AdminController extends Controller
     }
 
     public function dashboard()
-{
-    // Retrieve projects grouped by their creation date
-    $projectsByDate = Projects::selectRaw('DATE(created_at) as date, COUNT(*) as count')
-        ->groupBy('date')
-        ->orderBy('date')
-        ->get();
-
-    // Prepare data for project chart
-    $projectDates = $projectsByDate->pluck('date')->map(function ($date) {
-        return Carbon::parse($date)->format('Y-m-d');
-    });
-    $projectCounts = $projectsByDate->pluck('count');
-
-    // Combine project dates and counts into a single array
-    $projectChartData = [];
-    foreach ($projectDates as $index => $date) {
-        $projectChartData[] = [
-            'date' => $date,
-            'count' => $projectCounts[$index],
-        ];
+    {
+        // Retrieve projects grouped by their creation date
+        $projectsByDate = Projects::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+    
+        // Prepare data for project chart
+        $projectDates = $projectsByDate->pluck('date')->map(function ($date) {
+            return Carbon::parse($date)->format('Y-m-d');
+        });
+        $projectCounts = $projectsByDate->pluck('count');
+    
+        // Combine project dates and counts into a single array
+        $projectChartData = [];
+        foreach ($projectDates as $index => $date) {
+            $projectChartData[] = [
+                'date' => $date,
+                'count' => $projectCounts[$index],
+            ];
+        }
+    
+        // Retrieve total number of users in the system over time
+        $usersOverTime = User::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+    
+        // Prepare data for user chart
+        $userDates = $usersOverTime->pluck('date')->map(function ($date) {
+            return Carbon::parse($date)->format('Y-m-d');
+        });
+        $userCounts = $usersOverTime->pluck('count');
+    
+        // Combine user dates and counts into a single array
+        $userData = [];
+        foreach ($userDates as $index => $date) {
+            $userData[] = [
+                'timeframe' => $date,
+                'count' => $userCounts[$index],
+            ];
+        }
+    
+        // Additional data for donut chart (example: project status)
+        $projectStatuses = Projects::selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->get();
+    
+        $statusLabels = $projectStatuses->pluck('status');
+        $statusCounts = $projectStatuses->pluck('count');
+    
+        // Additional data for another chart (example: user roles)
+        $userRoles = User::selectRaw('role, COUNT(*) as count')
+            ->groupBy('role')
+            ->get();
+    
+        $roleLabels = $userRoles->pluck('role');
+        $roleCounts = $userRoles->pluck('count');
+    
+        return view('admin.dashboard', [
+            'projectChartData' => $projectChartData,
+            'userData' => $userData,
+            'statusLabels' => $statusLabels,
+            'statusCounts' => $statusCounts,
+            'roleLabels' => $roleLabels,
+            'roleCounts' => $roleCounts,
+        ]);
     }
+    
 
-    // Retrieve users grouped by their creation month
-    $usersByMonth = User::selectRaw('EXTRACT(YEAR FROM created_at) as year, EXTRACT(MONTH FROM created_at) as month, COUNT(*) as count')
-        ->groupBy('year', 'month')
-        ->orderBy('year')
-        ->orderBy('month')
-        ->get();
 
-    // Prepare data for user chart
-    $timeframes = $usersByMonth->map(function ($user) {
-        return Carbon::createFromDate($user->year, $user->month)->format('M Y');
-    });
-    $userCounts = $usersByMonth->pluck('count');
-
-    // Combine timeframes and user counts into a single array
-    $userData = [];
-    foreach ($timeframes as $index => $timeframe) {
-        $userData[] = [
-            'timeframe' => $timeframe,
-            'count' => $userCounts[$index],
-        ];
-    }
-
-    // Additional data for donut chart (example: project status)
-    $projectStatuses = Projects::selectRaw('status, COUNT(*) as count')
-        ->groupBy('status')
-        ->get();
-
-    $statusLabels = $projectStatuses->pluck('status');
-    $statusCounts = $projectStatuses->pluck('count');
-
-    // Additional data for another chart (example: user roles)
-    $userRoles = User::selectRaw('role, COUNT(*) as count')
-        ->groupBy('role')
-        ->get();
-
-    $roleLabels = $userRoles->pluck('role');
-    $roleCounts = $userRoles->pluck('count');
-
-    return view('admin.dashboard', [
-        'projectChartData' => $projectChartData,
-        'userData' => $userData,
-        'statusLabels' => $statusLabels,
-        'statusCounts' => $statusCounts,
-        'roleLabels' => $roleLabels,
-        'roleCounts' => $roleCounts,
-    ]);
-}
 
 
     public function collaborations()

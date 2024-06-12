@@ -18,10 +18,10 @@ class DashboardController extends Controller{
     $user = Auth::user();
     $userRole = $user->role;
 
-    $designerCount = User::where('role', 'DESIGNER')->count();
-    $clientCount = User::where('role', 'CLIENT')->count();
+    // Initialize variables to hold chart data
+    $projectStatus = [];
+    $collaborations = [];
 
-    $activeCollaborations = [];
     if ($userRole === 'CLIENT') {
         // Fetch projects with active collaborations for clients
         $activeCollaborations = Projects::where('user_id', $user->id)
@@ -30,12 +30,28 @@ class DashboardController extends Controller{
             })
             ->with(['collaborations' => function($query) {
                 $query->where('status', 'accepted')
-                      ->with('projectSchedules');
+                    ->with('projectSchedules');
             }, 'financialData'])
             ->get();
 
-        // Debugging output
-        logger()->info('Client active collaborations:', $activeCollaborations->toArray());
+        // Fetch project status data for the client
+        $projectStatus = Projects::selectRaw('status, COUNT(*) as count')
+            ->where('user_id', $user->id)
+            ->groupBy('status')
+            ->get();
+
+        // Fetch collaborations over time for the client
+        $collaborations = Collaborations::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->whereHas('project', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->where('status', 'accepted') // Filter by collaboration status
+            ->groupBy('date')
+            ->get();
+
+        // Count the number of designers
+        $designerCount = User::where('role', 'DESIGNER')->count();
+        $clientCount = User::where('role', 'CLIENT')->count();
     } elseif ($userRole === 'DESIGNER') {
         // Fetch active collaborations for designers
         $activeCollaborations = Collaborations::where('designer_id', $user->id)
@@ -45,28 +61,40 @@ class DashboardController extends Controller{
             }, 'projectSchedules']) // Load project schedules directly from collaborations
             ->get();
 
-        // Debugging output
-        logger()->info('Designer active collaborations:', $activeCollaborations->toArray());
+        // Fetch project status data for the designer
+        $projectStatus = Projects::selectRaw('status, COUNT(*) as count')
+            ->whereHas('collaborations', function ($query) use ($user) {
+                $query->where('designer_id', $user->id)
+                    ->where('status', 'accepted');
+            })
+            ->groupBy('status')
+            ->get();
+
+        // Fetch collaborations over time for the designer
+        $collaborations = Collaborations::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->where('designer_id', $user->id)
+            ->where('status', 'accepted') // Filter by collaboration status
+            ->groupBy('date')
+            ->get();
+
+        // Count the number of designers
+        $designerCount = User::where('role', 'DESIGNER')->count();
+        $clientCount = User::where('role', 'CLIENT')->count();
     }
 
-    $collaborations = Collaborations::selectRaw('DATE(created_at) as date, COUNT(*) as count')
-    ->groupBy('date')
-    ->get();
-
-    // Fetch project status data
-    $projectStatus = Projects::selectRaw('status, COUNT(*) as count')
-        ->groupBy('status')
-        ->get();
-
+    // Render the dashboard view with the appropriate data
     return view('dashboard', [
         'userRole' => $userRole,
         'activeCollaborations' => $activeCollaborations,
-        'designerCount' => $designerCount,
-        'clientCount' => $clientCount,
+        'designerCount' => $designerCount ?? 0, // Set default value if not defined
+        'clientCount' => $clientCount ?? 0, // Set default value if not defined
         'collaborations' => $collaborations,
-        'projectStatus' => $projectStatus, // Pass project status data to the view
+        'projectStatus' => $projectStatus,
     ]);
 }
+
+
+
 
 public function showDesigners(Request $request)
 {

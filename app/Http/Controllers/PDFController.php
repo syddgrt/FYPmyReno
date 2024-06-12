@@ -47,7 +47,9 @@ class PDFController extends Controller
             'totalCost' => $totalCost,
             'clientName' => $clientName,
             'designerName' => $designerName,
-            'base64' => $base64
+            'base64' => $base64,
+            'analyticsChart' => $analyticsChart,
+            'pieChart' => $pieChart
         ];
 
         // Load the PDF view and generate the PDF

@@ -1,179 +1,183 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PDF Report</title>
+    <title>Financial Data Report</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            padding: 40px;
+            background-color: #f8f9fa;
             color: #333;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin: 0;
+            padding: 20px;
         }
-        .header, .footer {
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
             text-align: center;
             margin-bottom: 20px;
-        }
-        .header img {
-            width: 150px;
-            height: auto;
         }
         .title {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
             font-size: 28px;
+            font-weight: bold;
+            color: #343a40;
         }
         .subtitle {
-            text-align: center;
-            color: #555;
-            margin-bottom: 40px;
             font-size: 22px;
+            color: #6c757d;
         }
-        h3 {
-            color: #666;
-            margin-top: 30px;
+        .section {
+            margin-bottom: 40px;
         }
-        .invoice-details {
-            margin-bottom: 20px;
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 10px;
         }
-        .invoice-details strong {
-            font-size: 18px;
-        }
-        .proposed-cost-table, .details-table {
+        .table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
+        .table th, .table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
             text-align: left;
         }
-        th {
-            background-color: #f4f4f4;
-            color: #333;
+        .table th {
+            background-color: #e9ecef;
+            color: #343a40;
             font-weight: bold;
-        }
-        td {
-            background-color: #fff;
-            color: #333;
         }
         .total-row {
+            background-color: #f8f9fa;
             font-weight: bold;
-            background-color: #f9f9f9;
         }
         .total-amount {
-            color: #d9534f;
+            color: #dc3545;
         }
         .signature-section {
             margin-top: 40px;
-        }
-        .signature-section h3 {
-            margin-bottom: 10px;
-        }
-        .signature-line {
-            border-bottom: 1px solid #333;
-            width: 200px;
-            margin-bottom: 40px;
-        }
-        .address-section {
-            margin-top: 5px;
-        }
-        .address-section h3 {
-            margin-bottom: 5px;
-        }
-        .address-line {
-            border-bottom: 1px solid #333;
-            width: 100%;
-            margin-bottom: 20px;
-            margin-top: 20px;
-        }
-        .signatures {
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
         }
-        .signatures .signature {
-            width: 45%;
+        .signature {
+            flex: 1;
             text-align: center;
         }
-        .designer-id {
-            margin-top: -20px;
+        .signature h4 {
+            margin-bottom: 10px;
+            color: #343a40;
+        }
+        .signature-line {
+            border-bottom: 2px solid #343a40;
+            width: 150px;
+            margin: 0 auto 20px;
+        }
+        .chart-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .chart {
+            margin-bottom: 30px;
+        }
+        .chart img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c757d;
         }
     </style>
 </head>
 <body>
-    
-    <div class="title">
-        Invoice
-    </div>
-    
-    <div class="subtitle">
-        {{ $project->title }}
-    </div>
-
-    <div class="invoice-details">
-        <h3>Client: <strong>{{ $clientName }}</strong></h3>
-        <h3>Designer: <strong>{{ $designerName }}</strong></h3>
-    </div>
-
-    <table class="proposed-cost-table">
-        <tr>
-            <th>Proposed Cost</th>
-            <th>Amount (RM)</th>
-        </tr>
-        <tr>
-            <td>Proposed Cost</td>
-            <td>{{ number_format($finance->cost_estimation, 2) }}</td>
-        </tr>
-    </table>
-
-    <table class="details-table">
-        <tr>
-            <th>Category</th>
-            <th>Amount (RM)</th>
-        </tr>
-        <tr>
-            <td>Actual Cost</td>
-            <td>{{ number_format($finance->actual_cost, 2) }}</td>
-        </tr>
-        <tr>
-            <td>Tax</td>
-            <td>{{ number_format($finance->tax, 2) }}</td>
-        </tr>
-        <tr>
-            <td>Additional Fees</td>
-            <td>{{ number_format($finance->additional_fees, 2) }}</td>
-        </tr>
-        <tr class="total-row">
-            <td>Total Cost</td>
-            <td class="total-amount">{{ number_format($totalCost, 2) }}</td>
-        </tr>
-    </table>
-
-    <div class="address-section">
-        <h4>Client Address</h4>
-        
-        <div class="address-line"></div>     
-    </div>
-    <div class="signature-section signatures">
-        <h4>Client Signature</h4>
-        <div class="signature">          
-            <div class="signature-line"></div>
+    <div class="container">
+        <div class="header">
+            <div class="title">Financial Data Report</div>
+            <div class="subtitle">{{ $project->title }}</div>
         </div>
-        <h4>Designer Signature</h4>
-        <div class="signature">           
-            <div class="signature-line"></div>
+
+        <div class="section">
+            <div class="section-title">Proposed Cost</div>
+            <table class="table">
+                <tr>
+                    <th>Description</th>
+                    <th>Amount (RM)</th>
+                </tr>
+                <tr>
+                    <td>Proposed Cost</td>
+                    <td>{{ number_format($finance->cost_estimation, 2) }}</td>
+                </tr>
+            </table>
         </div>
-    </div>
-    
-    <div class="footer">
-        <p>Generated by MyReno</p>
+
+        <div class="section">
+            <div class="section-title">Financial Details</div>
+            <table class="table">
+                <tr>
+                    <th>Category</th>
+                    <th>Amount (RM)</th>
+                </tr>
+                <tr>
+                    <td>Actual Cost</td>
+                    <td>{{ number_format($finance->actual_cost, 2) }}</td>
+                </tr>
+                <tr>
+                    <td>Tax</td>
+                    <td>{{ number_format($finance->tax, 2) }}</td>
+                </tr>
+                <tr>
+                    <td>Additional Fees</td>
+                    <td>{{ number_format($finance->additional_fees, 2) }}</td>
+                </tr>
+                <tr class="total-row">
+                    <td>Total Cost</td>
+                    <td class="total-amount">{{ number_format($totalCost, 2) }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Signatures</div>
+            <div class="signature-section">
+                <div class="signature">
+                    <h4>Client Signature</h4>
+                    <div class="signature-line"></div>
+                </div>
+                <div class="signature">
+                    <h4>Designer Signature</h4>
+                    <div class="signature-line"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            @if(isset($analyticsChart))
+                <div class="chart">
+                    <h3>Analytics Chart</h3>
+                    <img src="{{ $analyticsChart }}" alt="Analytics Chart">
+                </div>
+            @endif
+            @if(isset($pieChart))
+                <div class="chart">
+                    <h3>Pie Chart</h3>
+                    <img src="{{ $pieChart }}" alt="Pie Chart">
+                </div>
+            @endif
+        </div>
+
+        <div class="footer">
+            <p>Generated by MyReno</p>
+            <p><strong>Note:</strong> This is not a payment invoice!</p>
+        </div>
     </div>
 </body>
 </html>
+

@@ -3,35 +3,95 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Projects; // Corrected model import
-use App\Models\Collaborations; // Add this import
-use App\Models\FinancialData; // Add this import
+use App\Models\Projects;
+use App\Models\Collaborations;
+use App\Models\FinancialData;
+use App\Models\User;
+use Stripe\Stripe;
+use Stripe\Customer;
+use Stripe\Charge;
+use PDF;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
-    public function showPaymentPage(Projects $project) // Corrected model type hint
+    public function showPaymentPage(Projects $project)
     {
-        // Retrieve the collaboration for this project
         $collaboration = Collaborations::where('project_id', $project->id)->first();
-
-        // Retrieve the financial data for this project
         $finance = FinancialData::where('project_id', $project->id)->first();
 
-        // Pass the project and collaboration to the view
         return view('payment', compact('project', 'collaboration', 'finance'));
     }
 
-    public function processPayment(Request $request, Projects $project) // Corrected model type hint
+    public function processPayment(Request $request, Projects $project)
     {
-        $user = auth()->user();
+        Log::info('Payment process started for project ID: ' . $project->id);
 
-        $user->createOrGetStripeCustomer();
-        $user->updateDefaultPaymentMethod($request->stripeToken);
+        Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        $amount = $project->finance->totalCost * 100; // Amount in cents
+        try {
+            Log::info('Creating Stripe customer');
+            // Create a new Stripe customer if necessary
+            $customer = Customer::create([
+                'email' => auth()->user()->email,
+                'source' => $request->stripeToken,
+            ]);
 
-        $user->charge($amount, $request->stripeToken);
+            Log::info('Customer created: ' . $customer->id);
 
-        return redirect()->route('finances.show', $project->id)->with('success', 'Payment successful!');
+            $finance = FinancialData::where('project_id', $project->id)->first();
+            Log::info('Finance data retrieved: ' . json_encode($finance));
+
+            $collaboration = Collaborations::where('project_id', $project->id)->first(); // Add this line
+
+            $totalCost = $finance->actual_cost + $finance->tax + $finance->additional_fees;
+            $amount = $totalCost * 100;
+
+            Log::info('Creating Stripe charge for amount: ' . $amount);
+
+            // Create a charge
+            $charge = Charge::create([
+                'customer' => $customer->id,
+                'amount' => $amount,
+                'currency' => 'myr',
+                'description' => 'Payment for project ' . $project->title,
+            ]);
+
+            Log::info('Charge created: ' . $charge->id);
+
+            // Store payment details in session
+            session()->put('payment_details', [
+                'project' => $project,
+                'collaboration' => $collaboration,
+                'finance' => $finance,
+                'charge' => $charge,
+            ]);
+
+            return redirect()->route('payment.success')->with('success', 'Payment Submitted Successfully!');
+        } catch (\Exception $e) {
+            Log::error('Payment failed: ' . $e->getMessage());
+            return back()->withErrors(['message' => 'Payment failed: ' . $e->getMessage()]);
+        }
+    }
+
+    public function paymentSuccess()
+    {
+        // Retrieve payment details from session
+        $paymentDetails = session()->get('payment_details');
+
+        return view('payment_success', $paymentDetails)->with('success', 'Payment submitted successfully!');
+    }
+
+    public function downloadInvoice()
+    {
+        // Retrieve payment details from session
+        $paymentDetails = session()->get('payment_details');
+
+    
+        // Generate the invoice PDF
+        $pdf = PDF::loadView('invoice', $paymentDetails);
+
+        return $pdf->download('myReno-Invoice.pdf');
     }
 }
+

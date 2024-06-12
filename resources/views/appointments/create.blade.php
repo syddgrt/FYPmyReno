@@ -25,6 +25,11 @@
                     <form method="POST" action="{{ route('schedules.store', ['redirect' => 'collaborations.index']) }}">
                         @csrf
 
+                        
+                            
+                            <input type="hidden" name="collaboration_id" value="{{ request()->input('collaboration_id') }}">
+                        
+
                         <div class="mb-4">
                             <label for="project_id" class="block text-gray-700 text-sm font-bold mb-2">Project:</label>
                             <div class="bg-blue-500 text-white px-4 py-2 rounded-full inline-block">

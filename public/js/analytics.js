@@ -1,7 +1,5 @@
 // analytics.js
 
-// import Chart from 'chart.js/auto';
-
 document.addEventListener("DOMContentLoaded", function () {
     var ctx = document.getElementById('analyticsChart').getContext('2d');
     var myChart = new Chart(ctx, {

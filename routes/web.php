@@ -96,7 +96,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('/finances/{id}/edit', [FinancesController::class, 'edit'])->name('finances.edit');
     // Route::put('/finances/{id}', [FinancesController::class, 'update'])->name('finances.update');
     Route::post('/finances', [FinancesController::class, 'store'])->name('finances.store');
-    Route::get('/generate-pdf/{projectId}', [PDFController::class, 'generatePDF'])->name('generate.pdf');
+    Route::post('/generate-pdf/{projectId}', [PDFController::class, 'generatePDF'])->name('generate.pdf');
+
 
     Route::get('/client-engagement-data', [DashboardController::class, 'getClientEngagementData']);
 
@@ -111,8 +112,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/appointments/{appointment}', [SchedulesController::class, 'update'])->name('appointments.update');
     Route::delete('/appointments/{appointment}', [SchedulesController::class, 'destroy'])->name('appointments.destroy');
 
-    Route::get('/payment/{project}', [PaymentController::class, 'showPaymentPage'])->name('payment');
+    Route::get('/payment/{project}', [PaymentController::class, 'showPaymentPage'])->name('payment.page');
     Route::post('/payment/{project}', [PaymentController::class, 'processPayment'])->name('process.payment');
+    Route::get('/payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/download-invoice', [PaymentController::class, 'downloadInvoice'])->name('download.invoice');
+    // web.php
+
+    Route::get('/payment/{projectId}', [PaymentController::class, 'showPaymentPage'])->name('payment');
+
 
     Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
 

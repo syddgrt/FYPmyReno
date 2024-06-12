@@ -92,7 +92,7 @@
                 <!-- Time-Series Chart -->
             <div class="chart-wrapper-2 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-4">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="font-semibold text-lg mb-2">Active Collaborations in the System</h3>
+                    <h3 class="font-semibold text-lg mb-2">Your Active Collaborations</h3>
                     <canvas id="collaborationsChart" style="max-height: 320px;"></canvas>
                 </div>
             </div>

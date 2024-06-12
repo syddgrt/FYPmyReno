@@ -159,7 +159,7 @@
                     <div class="card-header ">
                         <div class="row">
                             <div class="col-sm-6 text-left">
-                                <h5 class="card-category">Number of Projects</h5>
+                                <h5 class="card-category">New Projects</h5>
                             </div>
                         </div>
                     </div>
@@ -176,7 +176,7 @@
                         <div class="card-header ">
                             <div class="row">
                                 <div class="col-sm-6 text-left">
-                                    <h5 class="card-category">Number of Users</h5>
+                                    <h5 class="card-category">New Users</h5>
                                 </div>
                             </div>
                         </div>

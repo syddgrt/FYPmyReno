@@ -68,16 +68,22 @@
 
                     <!-- PDF Generation Button -->
                     <div class="mt-8 flex space-x-4">
-                        <a href="{{ route('generate.pdf', $project->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Download PDF
-                        </a>
-                        @if(auth()->user()->role == 'CLIENT')
-                        <a href="{{ route('payment', $project->id) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                            Make a Payment
-                        </a>
+                        <form id="pdfForm" method="POST" action="{{ route('generate.pdf', $project->id) }}">
+                            @csrf
+                            <input type="hidden" name="analyticsChart" id="analyticsChartInput">
+                            <input type="hidden" name="pieChart" id="pieChartInput">
+                            <button type="submit" id="pdfButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Download PDF
+                            </button>
+                        </form>
 
-                        @endif
+
                     </div>
+                    @if(auth()->user()->role == 'CLIENT')
+                            <a href="{{ route('payment', $project->id) }}" class="pdf-button bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                Make a Payment
+                            </a>
+                        @endif
                 </div>
             </div>
         </div>
@@ -91,9 +97,15 @@
         const additionalFees = {{ $finance->additional_fees }};
         const totalCost = {{ $totalCost }};
 
+        // Function to convert canvas to data URL
+        function canvasToDataURL(canvasId) {
+            var canvas = document.getElementById(canvasId);
+            return canvas.toDataURL('image/png');
+        }
+
         // Analytics Chart
-        const ctx = document.getElementById('analyticsChart').getContext('2d');
-        new Chart(ctx, {
+        const analyticsCtx = document.getElementById('analyticsChart').getContext('2d');
+        const analyticsChart = new Chart(analyticsCtx, {
             type: 'bar',
             data: {
                 labels: ['Proposed/Estimation Cost', 'Actual Cost', 'Tax', 'Additional Fees', 'Total Cost'],
@@ -128,7 +140,7 @@
 
         // Pie Chart
         const pieCtx = document.getElementById('pieChart').getContext('2d');
-        new Chart(pieCtx, {
+        const pieChart = new Chart(pieCtx, {
             type: 'pie',
             data: {
                 labels: ['Proposed/Estimation Cost', 'Actual Cost', 'Tax', 'Additional Fees', 'Total Cost'],
@@ -156,10 +168,17 @@
 
         // Pass chart images to PDF generation endpoint
         document.addEventListener('DOMContentLoaded', function() {
-            var analyticsChartImage = canvasToDataURL('analyticsChartCanvas');
-            var pieChartImage = canvasToDataURL('pieChartCanvas');
-            var pdfButton = document.querySelector('.pdf-button');
-            pdfButton.href = '{{ route('generate.pdf', $project->id) }}?analyticsChart=' + encodeURIComponent(analyticsChartImage) + '&pieChart=' + encodeURIComponent(pieChartImage);
+            var analyticsChartImage = analyticsChart.toBase64Image();
+            var pieChartImage = pieChart.toBase64Image();
+
+            document.getElementById('analyticsChartInput').value = analyticsChartImage;
+            document.getElementById('pieChartInput').value = pieChartImage;
+
+            var pdfButton = document.getElementById('pdfButton');
+            pdfButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                document.getElementById('pdfForm').submit();
+            });
         });
     </script>
 </x-app-layout>
